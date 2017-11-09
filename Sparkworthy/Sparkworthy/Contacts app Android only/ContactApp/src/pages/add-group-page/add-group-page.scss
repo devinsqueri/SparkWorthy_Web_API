@@ -1,0 +1,21 @@
+page-add-group-page {
+ .profileImg
+  {
+    margin: 0 auto;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    vertical-align: middle;
+    overflow:hidden;
+    position: relative;
+    
+    .upload-img-btn{
+      position: absolute;
+      left: 0;
+      margin-left: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.15);
+      overflow: visible;
+    }
+  }
+}

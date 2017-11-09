@@ -1,0 +1,212 @@
+
+<link rel="stylesheet" href="edit-contact-page.scss">
+<ion-header>
+
+  <ion-navbar color="navigationBarColor">
+    <ion-title>Edit</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="saveEditedContact()" [hidden]="!onEdit">Save</button>
+       <button ion-button (click)="changeToEditView()" [hidden]="onEdit">
+        <ion-icon icon-right name="md-create" id="addIcon">
+        </ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-row id="profileRow" padding>
+    <ion-col id="imgCol" width-50>
+      <div class="profileImg" (click)="presentActionSheet()">
+        <lazy-img inputSrc="{{contactDetails.profilepic}}" [hidden]="profileImageUpdated" (load)="loaded()" ></lazy-img>
+        <!--<img src="{{contactDetails.profilepic}}" [hidden]="profileImageUpdated"  *ngIf="contactDetails.profilepic" >-->
+        <!--<img src="assets/Images/profile.jpg" [hidden]="profileImageUpdated"   *ngIf="!contactDetails.profilepic" >-->
+
+        <!--&lt;!&ndash;<img src="{{pathForImage(lastImage)}}" style="width: 50%" [hidden]="lastImage === null">&ndash;&gt;-->
+        <img src="{{imageStr}}" [hidden]="!profileImageUpdated">
+        <!--<img src="http://www.gstatic.com/webp/gallery/1.jpg" [hidden]="image">-->
+
+        <!--<h3 [hidden]="lastImage !== null">Please Select Image!</h3>-->
+        <!--<button ion-button icon-only block color="dark" class="upload-img-btn">
+        <ion-icon name="camera"></ion-icon>
+        </button>-->
+      </div>
+    </ion-col>
+    <ion-col id="profileTxt" width-50>
+      <h2>{{contactDetails.firstname}} {{contactDetails.lastname}}</h2>
+      <h3>{{contactDetails.profession}}</h3>
+      <h3 >{{contactDetails.position}}</h3>
+    </ion-col>
+  </ion-row>
+  <div text-right class="trendingBtn" color="primary"><span (click)="openMyTrend()"><strong>What's trending?</strong></span> <ion-icon name="paper" (click)="openMyTrend()"></ion-icon></div>
+  <ion-row>
+    <ion-col width-33 text-center>
+      <button ion-button class="roundBtn" (click)="openInterest()">
+        <ion-icon class="iconClass">
+          <img src="assets/icon/Chat.png">
+        </ion-icon>
+    </button>
+      <h6 color="primary">Interest</h6>
+    </ion-col>
+    <ion-col width-33 text-center>
+      <button ion-button class="roundBtn" (click)="openInnerCirlce()">
+          <ion-icon class="iconClass">
+            <img src="assets/icon/user.png">
+          </ion-icon>
+      </button>
+      <h6 color="primary">Inner Circle</h6>
+    </ion-col>
+    <ion-col width-33 text-center>
+      <button ion-button class="roundBtn" (click)="openRemainders()">
+          <ion-icon class="iconClass">
+            <img src="assets/icon/reminder.png">
+            </ion-icon>
+      </button>
+      <h6 color="primary">Reminder</h6>
+    </ion-col>
+  </ion-row>
+
+
+  <ion-list [hidden]="onEdit">
+
+    <ion-item>
+      <h2 color="primary">Add to Favorites</h2>
+      <rating [(ngModel)]="rate" item-right (click)="addFav()" readOnly="true"></rating>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>First Name</ion-label>
+      <ion-input type="text" [(ngModel)]="contactDetails.firstname" [disabled]="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Last Name</ion-label>
+      <ion-input type="text" [(ngModel)]="contactDetails.lastname" [disabled]="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Company</ion-label>
+      <ion-input type="text" [(ngModel)]="contactDetails.company" [disabled]="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Industry</ion-label>
+      <ion-input type="text" [(ngModel)]="contactDetails.profession" [disabled]="true"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Location</ion-label>
+      <ion-input type="text" [(ngModel)]="contactDetails.location" [disabled]="true"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Email</ion-label>
+      <ion-input type="text" [(ngModel)]="contactDetails.email" [disabled]="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Birthday</ion-label>
+      <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="contactDetails.birthday" [disabled]="true"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Relationship</ion-label>
+      <ion-input type="text" [(ngModel)]="contactDetails.relationship" [disabled]="true"></ion-input>
+    </ion-item>
+
+    <!--<ion-item>-->
+      <!--<ion-label floating>Location</ion-label>-->
+      <!--<ion-input type="text" [(ngModel)]="contactDetails.location" [disabled]="true"></ion-input>-->
+    <!--</ion-item>-->
+    <ion-item>
+      <ion-label floating>Position</ion-label>
+      <ion-input type="text" [(ngModel)]="contactDetails.position" [disabled]="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Mobile Number</ion-label>
+      <ion-input type="number" [(ngModel)]="contactDetails.phonenumber" [disabled]="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Office Number</ion-label>
+      <ion-input type="number" [(ngModel)]="contactDetails.officenumber" [disabled]="true"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Anniversary</ion-label>
+      <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="contactDetails.anniversary" [disabled]="true"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Notes</ion-label>
+      <ion-textarea autosize type="text" [(ngModel)]="contactDetails.notes" [disabled]="true"></ion-textarea>
+    </ion-item>
+
+  </ion-list>
+
+
+
+  <ion-list  [hidden]="!onEdit">
+
+    <ion-item>
+      <h2 color="primary">Add to Favorites</h2>
+      <rating [(ngModel)]="rate" item-right (click)="addFav()"></rating>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>First Name</ion-label>
+      <ion-input type="text" [(ngModel)]="contactDetails.firstname"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Last Name</ion-label>
+      <ion-input type="text" [(ngModel)]="contactDetails.lastname"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Company</ion-label>
+      <ion-input type="text" [(ngModel)]="contactDetails.company"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Industry</ion-label>
+      <ion-input type="text" [(ngModel)]="contactDetails.profession" ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Location</ion-label>
+      <ion-input type="text" [(ngModel)]="contactDetails.location"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Email</ion-label>
+      <ion-input type="text" [(ngModel)]="contactDetails.email"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Birthday</ion-label>
+      <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="contactDetails.birthday"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Relationship</ion-label>
+      <ion-input type="text" [(ngModel)]="contactDetails.relationship"></ion-input>
+    </ion-item>
+
+    <!--<ion-item>-->
+      <!--<ion-label floating>Location</ion-label>-->
+      <!--<ion-input type="text" [(ngModel)]="contactDetails.location"></ion-input>-->
+    <!--</ion-item>-->
+    <ion-item>
+      <ion-label floating>Position</ion-label>
+      <ion-input type="text" [(ngModel)]="contactDetails.position"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Mobile Number</ion-label>
+      <ion-input type="tel"   [(ngModel)]="contactDetails.phonenumber"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Office Number</ion-label>
+      <ion-input type="tel" [(ngModel)]="contactDetails.officenumber"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Anniversary</ion-label>
+      <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="contactDetails.anniversary"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Notes</ion-label>
+      <ion-textarea  type="text" [(ngModel)]="contactDetails.notes" ></ion-textarea>
+    </ion-item>
+
+  </ion-list>
+
+
+</ion-content>

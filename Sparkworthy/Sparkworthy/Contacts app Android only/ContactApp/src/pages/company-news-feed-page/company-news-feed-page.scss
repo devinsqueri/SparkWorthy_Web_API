@@ -1,0 +1,27 @@
+page-company-news-feed-page {
+  .post-title{
+    font-weight:bold;
+    margin-bottom:10px;
+    padding-right:32px;
+  }
+  .post-content{
+    margin-bottom:10px;
+  }
+  .post-info{
+    color:#aaa;
+    font-size: 12px;
+
+    span{
+      margin-right:5px;
+    }
+  }
+  .share-btn{
+    position: absolute;
+    top: 10px;
+    right: 16px;
+  }
+  .read-more{
+    float:right;
+    font-size:12px;
+  }
+}

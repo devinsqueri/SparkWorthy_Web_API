@@ -1,0 +1,117 @@
+
+<ion-header>
+  <ion-navbar color="navigationBarColor">
+    <ion-title [hidden]="hideContact">Contacts</ion-title>
+    <!--<ion-title [hidden]="hideGroup">Groups</ion-title>-->
+
+    <ion-buttons right>
+      <button ion-button icon-only (click)="addNewContact()">
+        <ion-icon name="md-add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <!--<div class="custom-inner-tab">-->
+  <div>
+    <ion-segment [(ngModel)]="segment" >
+      <ion-segment-button value="name" (ionSelect)="selectSegmentContact()" >
+        Name({{contactCount }})
+      </ion-segment-button>
+      <ion-segment-button value="group" (ionSelect)="selectSegmentGroup()">
+        Groups({{ groupCount}})
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+  <ion-row>
+
+
+    <!--<ion-searchbar>
+        <ion-label>Search</ion-label>
+      </ion-searchbar>-->
+
+  </ion-row>
+  <div [ngSwitch]="segment">
+    <ion-list class="contacts-list" *ngSwitchCase="'name'" >
+      <!--from data base contacts-->
+      <ion-searchbar [(ngModel)]="searchName" (input)="getNameItems($event)"   (ionClear)="onCancel()"></ion-searchbar>
+      <!--<ion-item-group *ngFor="let group of groupedContacts" [hidden]="!hideGrouped">-->
+        <!--<ion-item-divider bold>{{group.letter}}</ion-item-divider>-->
+        <ion-item-sliding *ngFor="let contact of contactList" [hidden]="!hideGrouped">
+          <ion-item (click)="openContactEditPage(contact)">
+            <ion-avatar item-left>
+              <!--<lazy-img ></lazy-img>-->
+              <!--<img src="{{contact.profilepic}}">-->
+              <!--<ion-img src="{{contact.profilepic}}" alt="assets/Images/profile.jpg"></ion-img>-->
+              <!--<ion-img src="assets/Images/profile.jpg" [hidden]="!networkReach"></ion-img>-->
+              <!--<lazy-img lazy-load inputSrc="{{contact.profilepic}}"  (loaded)="sample()" ></lazy-img>-->
+              <img src="{{contact.profilepic}}"  (loaded)="sample()" *ngIf="contact.profilepic" >
+              <img src="assets/Images/profile.jpg"  (loaded)="sample()" *ngIf="!contact.profilepic" >
+
+            </ion-avatar>
+            <span><strong>{{contact.firstname}} {{contact.lastname}}</strong></span>
+          </ion-item>
+          <ion-item-options side="right">
+            <button ion-button color="danger" (click)="deleteContact(contact)">Delete</button>
+          </ion-item-options>
+        </ion-item-sliding>
+        <ion-infinite-scroll (ionInfinite)="getContacts($event)" [hidden]="!hideGrouped">
+          <ion-infinite-scroll-content
+                  loadingSpinner="bubbles"
+                  loadingText="Loading more data...">
+          </ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      <!--</ion-item-group>-->
+
+      <!--<ion-infinite-scroll (ionInfinite)="getContacts($event)">-->
+        <!--<ion-infinite-scroll-content></ion-infinite-scroll-content>-->
+      <!--</ion-infinite-scroll>-->
+
+      <ion-item-sliding *ngFor="let con of contactList" [hidden]="!hideCon">
+        <ion-item (click)="openContactEditPage(con)">
+          <!--<ion-avatar item-left >-->
+            <!--<lazy-img inputSrc="{{con.profilepic}}"></lazy-img>-->
+            <!--&lt;!&ndash;<img src="{{con.profilepic}}"  (loaded)="sample()" *ngIf="con.profilepic" >&ndash;&gt;-->
+            <!--&lt;!&ndash;<img src="assets/Images/profile.jpg"  (loaded)="sample()" *ngIf="!con.profilepic" >&ndash;&gt;-->
+
+          <!--</ion-avatar>-->
+          <span><strong>{{con.firstname}} {{con.lastname}} </strong></span>
+        </ion-item>
+        <ion-item-options side="right">
+          <button ion-button color="danger" (click)="deleteContact(con)">Delete</button>
+        </ion-item-options>
+      </ion-item-sliding>
+
+      <!--<ion-item-group>
+        <ion-item-sliding *ngFor="let con of contactList">
+          <ion-item (click)="openContactEditPage(con)">
+            <ion-avatar item-left><img src="assets/Images/profile.jpg"></ion-avatar>
+            <span><strong>{{con.firstname}} {{con.lastname}} </strong></span>
+          </ion-item>
+          <ion-item-options side="right">
+            <button ion-button color="danger" (click)="deleteContact(con)">Delete</button>
+          </ion-item-options>
+        </ion-item-sliding>
+        </ion-item-group>-->
+    </ion-list>
+
+
+    <ion-list *ngSwitchCase="'group'">
+      <ion-searchbar [(ngModel)]="searchGroup" (input)="getGroupItems($event)" (ionClear)="onCancelGroup($event)"></ion-searchbar>
+      <ion-item-sliding *ngFor="let item of groupList">
+        <ion-item on-hold="onHold()" (click)="openGroupEdit(item)">
+          <ion-avatar item-left>
+            <lazy-img inputSrc="{{item.ProfilePicture}}"></lazy-img>
+            <!--<img src="{{item.ProfilePicture}}"  (loaded)="sample()" *ngIf="item.ProfilePicture" >-->
+            <!--<img src="assets/Images/profile.jpg"  (loaded)="sample()" *ngIf="!item.ProfilePicture" >-->
+
+          </ion-avatar>
+          <span><strong>{{item.GroupName}}</strong></span>
+        </ion-item>
+        <ion-item-options side="right">
+          <button ion-button color="danger" (click)="deleteGroup(item)">Delete</button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </div>
+</ion-content>

@@ -1,0 +1,69 @@
+page-settings-page {
+  .coverDiv{
+    background-color: #8a4182;
+    width: 100%;
+    height: 100%;
+  }
+  lazy-img img {
+    //display: block;
+    //height: inherit;
+    //position: relative;
+    min-width: 50% !important;
+    width: auto ;
+    z-index: 0;
+  }
+  .coverPic{
+    min-width: 50% !important;
+
+    //width: 100%;
+    height: 100% !important;
+  }
+  #profleTxtId
+  {
+    position: absolute;
+    margin-top: 35%;
+  }
+  #editIconCol
+  {
+    text-align: -webkit-right;
+    margin-right: 17px;
+  }
+  #profileTxtCol
+  {
+    text-align: -webkit-center;
+    //margin-right: 17px;
+    margin-top: -9px;
+  }
+  #iconCol
+  {
+    text-align: -webkit-right;
+  }
+  #comapanyName
+  {
+    margin-left: -5px;
+  }
+
+  .ion-md-home:before {
+    content: "\f30c";
+    font-size: 25px;
+  }
+  #iconColLoc
+  {
+    height: 30px;
+    text-align: -webkit-right;
+  }
+  .iconClass
+  {
+    color: #ff4b2e;
+  }
+  .text-input[disabled],.datetime-disabled, .item-datetime-disabled ion-label{
+        opacity:1;
+    }
+  [align-vcenter]{
+    align-items: center;
+  }
+  .icon-large{
+    font-size:3.2rem;
+    right: 25%;
+  }
+}

@@ -1,0 +1,105 @@
+
+<ion-header>
+
+  <ion-navbar color="navigationBarColor">
+    <ion-title>{{from}}</ion-title>
+    <ion-buttons end>
+       <button ion-button (click)="changeToEditView()" [hidden]="onEdit">
+        <ion-icon icon-right name="md-create" id="addIcon">
+        </ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content [hidden]="!onEdit">
+  <ion-list>
+      <ion-item>
+        <ion-label floating>First Name</ion-label>
+        <ion-input type="text" [(ngModel)]="innerCircleInfo.firstname" ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Last Name</ion-label>
+        <ion-input type="text" [(ngModel)]="innerCircleInfo.lastname" ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Birthday</ion-label>
+        <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="innerCircleInfo.birthday" ></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Relationship</ion-label>
+        <ion-input type="text" [(ngModel)]="innerCircleInfo.relationship" ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Industry</ion-label>
+        <ion-input type="text" [(ngModel)]="innerCircleInfo.profession" ></ion-input>
+      </ion-item>
+
+      <!--<ion-item>-->
+          <!--<ion-label floating>Company</ion-label>-->
+          <!--<ion-input type="text" [(ngModel)]="innerCircleInfo.company" ></ion-input>-->
+      <!--</ion-item>-->
+
+      <ion-item>
+        <ion-label floating>Anniversary</ion-label>
+        <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="innerCircleInfo.anniversary" ></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Notes</ion-label>
+        <ion-textarea  type="text" [(ngModel)]="innerCircleInfo.notes" ></ion-textarea>sss
+      </ion-item>
+  </ion-list>
+  <div padding>
+    <button ion-button block class="btn" id="syncBtn" (click)="addInnerCircle()" color="appButtonColor" >Save</button>
+  </div>
+</ion-content>
+
+<ion-content [hidden]="onEdit">
+  <ion-list>
+      <ion-item>
+        <ion-label floating>First Name</ion-label>
+        <ion-input type="text" [(ngModel)]="innerCircleInfo.firstname" [disabled]="true"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Last Name</ion-label>
+        <ion-input type="text" [(ngModel)]="innerCircleInfo.lastname" [disabled]="true"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Birthday</ion-label>
+        <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="innerCircleInfo.birthday" [disabled]="true"></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Relationship</ion-label>
+        <ion-input type="text" [(ngModel)]="innerCircleInfo.relationship" [disabled]="true"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Industry</ion-label>
+        <ion-input type="text" [(ngModel)]="innerCircleInfo.profession" [disabled]="true"></ion-input>
+      </ion-item>
+
+      <!--<ion-item>-->
+      <!--<ion-label floating>Company</ion-label>-->
+      <!--<ion-input type="text" [(ngModel)]="innerCircleInfo.company" [disabled]="true" ></ion-input>-->
+      <!--</ion-item>-->
+
+      <ion-item>
+        <ion-label floating>Anniversary</ion-label>
+        <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="innerCircleInfo.anniversary" [disabled]="true"></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Notes</ion-label>
+        <ion-textarea  type="text" [(ngModel)]="innerCircleInfo.notes" [disabled]="true"></ion-textarea>
+      </ion-item>
+  </ion-list>
+</ion-content>

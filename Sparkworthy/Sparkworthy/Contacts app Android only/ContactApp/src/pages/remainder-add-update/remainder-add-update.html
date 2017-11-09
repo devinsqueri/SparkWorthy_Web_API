@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-navbar color="navigationBarColor">
+    <ion-title>{{navHeader}}</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="changeToEditView()" [hidden]="bool">
+        <ion-icon icon-right name="md-create" id="addIcon">
+        </ion-icon>
+      </button>
+      <ion-toggle [(ngModel)]="activate" [hidden]="!boolTog"></ion-toggle>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content [hidden]="!bool">
+  <ion-list>
+    <ion-item>
+      <ion-label floating>Reminder</ion-label>
+      <ion-input type="text" [(ngModel)]="remainderInfo.Description"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Date</ion-label>
+      <ion-input type="date" (click)="showcalenderDate()" [(ngModel)]="remainderInfo.Date" [disabled]="true"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label floating >Time</ion-label>
+        <ion-input type="text"   (click)="showcalenderTime()" [disabled]="true" [(ngModel)]="remainderInfo.Time"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Short note</ion-label>
+      <ion-textarea  type="text" [(ngModel)]="remainderInfo.ShortNote"></ion-textarea>
+    </ion-item>
+
+  </ion-list>
+
+  <div padding>
+    <button ion-button block id="createAccBtn" (click)="saveUpdateRemainder()">{{navHeader}}</button>
+  </div>
+</ion-content>
+
+<ion-content [hidden]="bool">
+  <ion-list>
+    <ion-item>
+      <ion-label floating>Reminder</ion-label>
+      <ion-input type="text" [(ngModel)]="remainderInfo.Description" [disabled]="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Date</ion-label>
+      <ion-input type="date" [(ngModel)]="remainderInfo.Date" [disabled]="true"></ion-input>
+    </ion-item>
+      <ion-item>
+      <ion-label floating>Time</ion-label>
+      <ion-input type="text" [(ngModel)]="remainderInfo.Time" [disabled]="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Short note</ion-label>
+      <ion-textarea  type="text" [(ngModel)]="remainderInfo.ShortNote" [disabled]="true"></ion-textarea>
+    </ion-item>
+  </ion-list>
+</ion-content>

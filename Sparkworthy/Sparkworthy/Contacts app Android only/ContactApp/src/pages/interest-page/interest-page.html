@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-navbar color="navigationBarColor">
+    <ion-title>Interests</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="addInterest()">
+        <ion-icon icon-right name="md-add" id="addIcon">
+        </ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <!--<ion-item>
+      <ion-avatar item-left>
+        <img src="assets/Images/profile.jpg">
+      </ion-avatar>
+      <span><strong>{{contactDetails.firstname}}</strong></span>
+    </ion-item>-->
+    <!--<ion-item-sliding *ngFor="let interest of getContactInterest">-->
+      <!--<ion-item (click)="openInterestFeed()">-->
+        <!--<ion-icon item-left class="iconClass"><img src="assets/icon/Golf-icon.png"></ion-icon>-->
+        <!--<ion-label>{{interest.InterestName}}</ion-label>-->
+        <!--&lt;!&ndash;<ion-checkbox color="dark" checked="true" item-right ></ion-checkbox>&ndash;&gt;-->
+      <!--</ion-item>-->
+      <!--<ion-item-options side="right">-->
+        <!--<button ion-button color="danger" (click)="deleteInterest(interest)">Delete</button>-->
+      <!--</ion-item-options>-->
+    <!--</ion-item-sliding>-->
+    <ion-list>
+      <ion-item><div color="medium" text-center><span>{{this.interestCount}}</span></div></ion-item>
+
+      <ion-item-sliding *ngFor="let item of getContactInterest">
+        <ion-item>
+          <ion-avatar item-left><img src="assets/icon/Golf-icon.png"></ion-avatar>
+          <span><strong>{{item.InterestName}}</strong></span>
+        </ion-item>
+        <ion-item-options side="right">
+        <button ion-button color="danger" (click)="deleteInterest(item)">Delete</button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+</ion-content>

@@ -1,0 +1,50 @@
+page-home-page {
+  .user-profile{
+    .name{
+      display:inline-block;
+      vertical-align: middle;
+    }
+    .avatar{
+      display:inline-block;
+      vertical-align: middle;
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      overflow:hidden;
+      margin-left:10px;
+      img{
+        width: 42px;
+        height: 42px;
+      }
+    }
+  }
+  .iconClass
+  {
+    width: 20px;
+    height: 20px;
+  }
+  .toolbar-ios ion-title{
+    position: absolute;
+    top: 0;
+    /* left: 0; */
+    right: 0;
+    left : none;
+    /* right: 0px; */
+    padding: 0 0px 1px;
+    width: 30%;
+    height: 100%;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    pointer-events: none;
+  }
+}
+#iconNav
+{
+  color: #EC8428;
+}
+
+
+               //.user-profile.title.title-ios {
+               //  margin-left: 25%;
+               //}
+

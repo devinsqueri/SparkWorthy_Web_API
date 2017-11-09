@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-navbar color="navigationBarColor">
+    <ion-title>Inner circle</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="openAddContacts()">
+        <ion-icon icon-right name="md-add" id="addIcon">
+        </ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <!--<ion-list>-->
+    <!--<ion-item>-->
+      <!--<ion-avatar item-left>-->
+        <!--<img src="{{contactDetails.profilepic}}">-->
+      <!--</ion-avatar>-->
+      <!--<span><strong>{{contactname}}</strong></span>-->
+    <!--</ion-item>-->
+  <!--</ion-list>-->
+  <ion-list>
+    <ion-item><div text-center><span color="medium">{{this.count}}</span></div></ion-item>
+
+    <ion-item-sliding *ngFor="let con of contactList" >
+      <ion-item (click)="openEdit(con)">
+        <h2><strong>{{con.firstname}} {{con.lastname}}</strong></h2>
+        <p item-right>{{con.relationship}}</p>
+      </ion-item>
+      <ion-item-options side="right">
+        <!--<button ion-button  (click)="openEdit(con)">Edit</button>-->
+        <button ion-button color="danger" (click)="deleteInnerCircle(con)">Delete</button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

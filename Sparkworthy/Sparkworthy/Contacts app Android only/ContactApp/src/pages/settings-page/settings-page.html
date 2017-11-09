@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-navbar color="navigationBarColor">
+    <ion-title>Settings</ion-title>
+    <ion-buttons left>
+      <button ion-button (click)="syncAllFunctions()">Sync</button>
+    </ion-buttons>
+    <ion-buttons right>
+      <button ion-button (click)="logout()">Logout</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <!--<div id="profileBlock">-->
+  <div id="profileBlock" class="dp-block" (click)="presentActionSheet()" style="background-image: url(assets/Images/profile.jpg)">
+    <!--<div id="profileBlock" class="dp-block" (click)="presentActionSheet()">-->
+    <!--<div class="coverDiv"></div>-->
+
+    <!--<img [src]="imageSrc" /> -->
+    <!--<img src="{{imageSrc}}">
+    <ion-icon name="images" on-tap="openGallery()"></ion-icon>
+    <p>Choose a Photo</p>-->
+
+    <img src="{{userImageprofile}}" class="coverPic">
+    <!--<lazy-img lazy-load [inputSrc]="userImageprofile"></lazy-img>-->
+    <!--<img src="{{userImageprofile}}">-->
+    <!--<h4 [hidden]="lastImage !== null">Please Select Image!</h4>-->
+
+    <!--<button ion-button icon-only clear color="dark" class="upload-img-btn" >
+        <ion-icon name="camera"></ion-icon>
+      </button>-->
+    <!--<button ion-button icon-left (click)="uploadImage()" [disabled]="lastImage === null">
+        <ion-icon name="cloud-upload"></ion-icon> Upload
+      </button>-->
+  </div>
+
+  <ion-list>
+    <ion-item (click)="openAccountSyncPage()">
+      <ion-label>Sync Mobile Contacts</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Name</ion-label>
+      <ion-input type="text" [(ngModel)]="userName"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Company Name</ion-label>
+      <ion-input type="text" [(ngModel)]="userCompany"></ion-input>
+    </ion-item>
+    <ion-row align-vcenter>
+      <ion-col width-80>
+        <ion-item>
+          <ion-label floating>Current Location</ion-label>
+          <ion-input type="text" [(ngModel)]="userCity" ></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col width-20 style="text-align: center">
+        <button ion-button clear large (click)="navigateMe()" class="icon-large" [hidden]="spinnerBool">
+          <ion-icon name="ios-locate-outline"></ion-icon>
+        </button>
+        <ion-spinner name="bubbles" [hidden]="!spinnerBool"></ion-spinner>
+      </ion-col>
+    </ion-row>
+  </ion-list>
+  <div padding>
+    <button ion-button block class="btn" id="signInBtn" (click)="updateUserDetails()">Save</button>
+  </div>
+</ion-content>
+<ion-footer>
+  <p>Build number : 6.0 </p>
+</ion-footer>
+<!--action sheet-->
+<!--<ion-footer>
+  <ion-toolbar color="primary">
+    <ion-buttons>
+      <button ion-button icon-left (click)="presentActionSheet()">
+        <ion-icon name="camera"></ion-icon>Select Image
+      </button>
+      <button ion-button icon-left (click)="uploadImage()" [disabled]="lastImage === null">
+        <ion-icon name="cloud-upload"></ion-icon>Upload
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>-->

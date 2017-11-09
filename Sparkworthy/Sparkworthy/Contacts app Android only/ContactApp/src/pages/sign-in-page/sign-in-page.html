@@ -1,0 +1,53 @@
+<ion-content id="ionContent" [hidden]="onSign">
+  <div class="content-wrapper">
+  <div class="logo-wrapper">
+    <img src="assets/Images/Logo.png" alt="">
+  </div>
+
+  <ion-list id="inputList">
+    <ion-item class="ionItem">
+      <ion-label floating><b class="txt">E-mail</b></ion-label>
+      <ion-input type="email" [(ngModel)]="username"  >admin</ion-input>
+    </ion-item>
+    <ion-item class="ionItem">
+      <ion-label floating><b class="txt">Password</b></ion-label>
+      <ion-input type="password"  [(ngModel)]="password" >admin</ion-input>
+    </ion-item>
+  </ion-list>
+  <div padding>
+    <button ion-button block class="btn" id="signInBtn" (click)="signIn()">Sign in</button>
+  </div>
+  <!--<div id="mainDiv" padding>
+    <div id="innerBox1">
+      <hr class="line">
+    </div>
+    <div id="circle">
+      <p id="cirlceTxt">or</p>
+    </div>
+    <div id="innerBox2">
+    <hr class="line">
+    </div>
+  </div>-->
+  <div text-center>
+    <a href="#" block ion-text color="primary" class="link" id="createBtn" (click)="openCreateAccount()" >Create an Account</a>
+  </div>
+  </div>
+</ion-content>
+
+
+<ion-content id="ionContent" [hidden]="!onSign">
+  <ion-item style="text-align: center; margin-top: 20%">
+    <h2>We are almost there....</h2>
+  </ion-item>
+  <ion-item style="text-align: center; margin-top: 20%" no-lines>
+    <ion-spinner name="circles"></ion-spinner>
+  </ion-item>
+  <ion-item style="text-align: center;">
+    <h2>Loading contacts...</h2>
+  </ion-item>
+
+  <ion-item [hidden]="onTimeOut" margin-top="20%">
+    <h2 text-wrap>This seems to be taking longer than expected. Please hang in there</h2>
+  </ion-item>
+</ion-content>
+

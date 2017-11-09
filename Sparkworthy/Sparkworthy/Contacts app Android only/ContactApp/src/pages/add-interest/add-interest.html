@@ -1,0 +1,53 @@
+
+<ion-header>
+
+  <ion-navbar color="navigationBarColor">
+    <ion-title>Interests</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="hideSearch()" [hidden]="bool">
+        <ion-icon icon-right name="md-add" id="addIcon">
+        </ion-icon>
+      </button>
+
+      <button ion-button (click)="hideAdd()" [hidden]="!bool">
+        <ion-icon icon-right name="md-search" id="addIconId">
+        </ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <!--<tag-input [(ngModel)]='interests' theme='bootstrap' (onAdd)="onItemAdded($event)" (onRemove)="onItemRemoved($event)" [hideForm]="true"></tag-input>-->
+  <ion-row style="border-style: ridge;" [hidden]="!bool">
+    <ion-col width-80>
+      <ion-input type="text" placeholder="Enter the Interests" [(ngModel)]="txtInterest"></ion-input>
+    </ion-col>
+    <ion-col class="colAdd">
+      <button ion-button (click)="addInterest()">Add</button>
+    </ion-col>
+  </ion-row>
+  <ion-searchbar (ionInput)="onInput($event)" (ionClear)="onCancel($event)" [hidden]="bool"></ion-searchbar>
+
+  <ion-item><div color="medium" text-center><span>{{interestText}}</span></div></ion-item>
+
+  <tag-input [ngModel]="interests"  theme='bootstrap'  [hideForm]="true" (onRemove)="onItemRemoved($event)" [modelAsStrings]="true" #input >
+    <template let-item="item" let-index="index"> <!-- DEFINE HERE YOUR TEMPLATE -->
+      <span>
+            <!-- YOU MAY ACTUALLY DISPLAY WHATEVER YOU WANT IF YOU PASS AN OBJECT AS ITEM -->
+        <!-- ex. item.myDisplayValue -->
+
+            {{ item.InterestName }}
+        </span>
+      <delete-icon (click)="input.removeItem(item, index)"></delete-icon>
+    </template>
+    <!--<div text-right>-->
+      <!--&lt;!&ndash;<button ion-button (click)="input.addItem(item)" >Add</button>&ndash;&gt;-->
+      <!--<button ion-button (click)="sample()">Add</button>-->
+
+    <!--</div>-->
+
+  </tag-input>
+</ion-content>

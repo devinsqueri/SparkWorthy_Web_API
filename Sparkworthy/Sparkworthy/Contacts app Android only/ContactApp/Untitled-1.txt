@@ -1,0 +1,304 @@
+import { Component ,Pipe } from '@angular/core';
+import { NavController, NavParams , AlertController , Platform } from 'ionic-angular';
+import { Database } from '../../providers/database';
+import {HTTP} from 'ionic-native';
+import * as _ from "lodash";
+import {Http, Headers} from "@angular/http";
+
+declare var Connection: any;
+declare var navigator: any;
+
+//pages
+import { AddContactsPagePage } from '../add-contacts-page/add-contacts-page';
+import { GroupEditPagePage } from '../group-edit-page/group-edit-page';
+import { EditContactPagePage } from '../edit-contact-page/edit-contact-page';
+
+@Pipe({ name: 'orderby' })
+export class OrderByPipe {
+  transform(array, args) {
+    return _.sortBy(array, args);
+  }
+}
+
+@Component({
+  selector: 'page-all-contacts-page',
+  templateUrl: 'all-contacts-page.html',
+})
+export class AllContactsPagePage {
+  segment: string = "name";
+  isConnectedToNet : Boolean;
+
+  public contactList: Array<Object>;
+  public groupList: any;
+  public glist: any;
+  public groupListInitial: Array<Object>;
+  //items;
+  searchTerm = '';
+  public cust = []; public custInit = [];
+
+  constructor(public navCtrl: NavController, public navParams: NavParams , public alertCtrl : AlertController ,
+              public database : Database , public platform : Platform) {
+    // var a = this.contactList.length;
+    database.checkContactSync();
+    this.getallGroups();
+
+    //alert();
+
+    //this.initializeItems();
+  }
+
+
+  ionViewWillEnter()
+  {
+    console.log('ionViewWillEnter AllContactsPagePage');
+    if (this.database.contactAdded == true)
+    {
+      this.database.contactAdded = false;
+      this.displayContacts();
+    }
+    if (this.database.groupAdded == true)
+    {
+      this.database.groupAdded = false;
+      this.getallGroups();
+    }
+  }
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad AllContactsPagePage');
+    }
+  addNewContact()
+  {
+    console.log(this.segment);
+    switch (this.segment)
+    {
+      case 'name':
+        this.navCtrl.push(AddContactsPagePage);
+        break;
+      case 'group':
+      //this.initializeItems();
+        this.createGroup();
+        break;
+    }
+  }
+  createGroup() {
+    let alert = this.alertCtrl.create({
+      title: 'Enter group name',
+      inputs: [
+        {
+          name: 'groupname',
+          placeholder: 'Group name'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Create',
+          handler: data => {
+            this.database.addGroup(data.groupname).then((result) => {
+              // this.groupList = <Array<Object>> result;
+              this.getallGroups();
+
+            }, (error) => {
+              console.log("ERROR: ", error);
+              // let alert = this.alertCtrl.create({
+              //   title: "Error in saving group",
+              //   subTitle: JSON.stringify(error) ,
+              //   buttons: [
+              //     {
+              //       text: 'Ok',
+              //       handler: data => {
+              //       }
+              //     }
+              //   ]
+              // });
+              // alert.present();
+            });
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+  transform(array,args)
+  {
+    this.contactList = [];
+    let a = _.sortBy(array,args);
+    this.contactList = a;
+  }
+  displayContacts()
+  {
+    this.database.getAllContacts().then((result) => {
+      this.contactList = <Array<Object>> result;
+      let aa  = this.contactList;
+      this.transform(aa,"firstname");
+      // let alert = this.alertCtrl.create({
+      //   title: JSON.stringify(this.contactList.length),
+      //   buttons: [
+      //     {
+      //       text: 'Ok',
+      //       handler: data => {
+      //       }
+      //     }
+      //   ]
+      // });
+      // alert.present();
+    }, (error) => {
+      console.log("ERROR: ", error);
+      let alert = this.alertCtrl.create({
+        title: "Error in displaying contact",
+        subTitle:JSON.stringify(error) ,
+        buttons: [
+          {
+            text: 'Ok',
+            handler: data => {
+            }
+          }
+        ]
+      });
+      alert.present();
+    });
+  }
+  openGroupEdit(v)
+  {
+    this.navCtrl.push(GroupEditPagePage,{object:v});
+  }
+  openContactEditPage(obj)
+  {
+    // let alert = this.alertCtrl.create({
+    //   title: obj.lastname,
+    //   subTitle: obj.firstname ,
+    //   buttons: [
+    //     {
+    //       text: 'Ok',
+    //       handler: data => {
+    //       }
+    //     }
+    //   ]
+    // });
+    // alert.present();
+    this.navCtrl.push(EditContactPagePage,{object:obj});
+  }
+  getallGroups()
+  {
+    this.database.getAllgroups().then((result) => {
+      this.groupList = <Array<Object>> result;
+      this.groupListInitial = <Array<Object>> result;
+
+      // for (var i = 0; this.groupList.length > i; i++)
+      // {
+      //     this.cust.push(this.groupList[i]);
+      //     this.custInit.push(this.groupList[i]);
+      // }
+      // console.log(this.cust);
+      // console.log(this.groupList);
+    }, (error) => {
+      console.log("ERROR: ", error);
+      let alert = this.alertCtrl.create({
+        title: "Error in displaying Group",
+        buttons: [
+          {
+            text: 'Ok',
+            handler: data => {
+            }
+          }
+        ]
+      });
+      alert.present();
+    });
+  }
+
+  // initializeItems() {
+  //   this.items = this.groupList
+  // }
+
+  deleteContact(v)
+  {
+
+    this.database.deleteContact(v['contactid']).then((result)=>{
+      if(v['contactidext'] != null)
+      {
+        this.checkNetworkToDeleteContact(v['contactidext']);
+      }
+      this.displayContacts();
+
+
+    },(error)=>{
+      console.log("ERROR: ", error);
+    });
+  }
+  deleteGroup(v)
+  {
+    this.database.deleteGroup(v['GroupId']).then((result)=>{
+      this.getallGroups();
+
+    },(error)=>{
+      console.log("ERROR: ", error);
+    });
+  }
+  checkNetworkToDeleteContact(v)
+  {
+    this.platform.ready().then(() => {
+      var networkState = navigator.connection.type;
+      if (networkState === Connection.NONE)
+      {
+        this.database.saveContactToDelete(v).then((result) => {
+        }, (error) => {
+          console.log("ERROR: ", error);
+        });
+        this.isConnectedToNet = false;
+        // document.addEventListener("online",ononline(),false);
+        let alert = this.alertCtrl.create({
+          title: "No Internet Connection",
+          subTitle: "event set",
+          buttons: [
+            {
+              text: 'Ok',
+              handler: data => {
+              }
+            }
+          ]
+        });
+        alert.present();
+      }
+      else
+      {
+
+        HTTP.get("http://192.168.1.211:82/api/contact/delete?ContactId="+v ,{},{})
+            .then(datafrmapi => {
+
+            })
+            .catch(error => {
+              console.log(error.status);
+              console.log(error.error); // error message as string
+              console.log(error.headers);
+            });
+
+        this.isConnectedToNet = true;
+      }
+    });
+  }
+  public ononline() {
+  }
+
+  getItems(searchbar) {
+
+      this.getallGroups();
+
+      // set q to the value of the searchbar
+      var q = searchbar.target.value;
+
+      if (q && q.trim() != '') {
+        this.groupList = this.groupList.filter((item) => {
+          return (item.GroupName.toLowerCase().indexOf(q.toLowerCase()) > -1);
+        })
+      }
+
+  }
+
+
+}

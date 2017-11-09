@@ -1,0 +1,93 @@
+
+<ion-header>
+
+  <ion-navbar color="navigationBarColor">
+    <ion-title class="user-profile" text-right>
+      <span class="name" (click)="switchRoot()" >{{userName}}</span>
+      <!--<span class="avatar"><img src="assets/Images/P-2.png"></span>-->
+      <span class="avatar" (click)="switchRoot()" ><img src="{{image}}"></span>
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <strong>Company</strong>
+      <span ion-text item-right   >{{userCompany}}</span>
+      <!--<ion-icon class="iconClass" item-right><img src="assets/icon/articles-icon.png"></ion-icon>-->
+    </ion-item>
+    <ion-item>
+      <strong>Current Location</strong>
+      <span ion-text color="primary" item-right (click)="goToLocation()" >{{userCity}}</span>
+      <ion-icon class="iconClass" id="iconNav" name="ios-navigate" item-right (click)="goToLocation()" ></ion-icon>
+    </ion-item>
+  </ion-list>
+  <ion-list>
+    <ion-item-divider>
+      <strong>Favorites</strong>
+    </ion-item-divider>
+        <ion-item text-center [hidden]="nofav"><span color="medium">No Favorites</span></ion-item>
+
+    <ion-item (click)="openEditPage(con)" *ngFor="let con of contactList ">
+      <ion-avatar item-left>
+        <lazy-img inputSrc="{{con.profilepic}}"></lazy-img>
+        <!--<img src="{{con.profilepic}}">-->
+        <!--<img src="{{con.profilepic}}"  (loaded)="sample()" *ngIf="con.profilepic" >-->
+        <!--<img src="assets/Images/profile.jpg"  (loaded)="sample()" *ngIf="!con.profilepic" >-->
+
+      </ion-avatar>
+      <span><strong>{{con.firstname}} {{con.lastname}}</strong></span>
+      <!--<p text-center [hidden]="nofav"><span color="medium">No Favorites</span></ion-item>-->
+
+    </ion-item>
+  </ion-list>
+  <ion-list>
+    <ion-item-divider>
+      <strong>Reminders</strong>
+    </ion-item-divider>
+    
+    <ion-item text-center [hidden]="noreminder"><span color="medium">No Upcoming Reminders</span></ion-item>
+
+    <ion-item-sliding *ngFor="let remain of allRemainderofContact" >
+    <ion-item>
+      <ion-row>
+        <p><strong>{{remain.firstname}} {{remain.lastname}}</strong></p>
+      </ion-row>
+      <ion-row class="flex-sb" (click)="openRemainderPage(remain)">
+
+
+        <ion-col width-33>
+          <!--<ion-row>-->
+            <!--<p><strong>{{remain.ContactName}}</strong></p>-->
+          <!--</ion-row>-->
+          <ion-row>
+            <p class="text-xs">{{ remain.Date |  date:'mediumDate'  }}</p>
+          </ion-row>
+          <ion-row>
+            <p class="text-xs">
+              {{ remain.timehr }}
+            </p>
+          </ion-row>
+        </ion-col>
+        <ion-col width-50 id="commandId" class="truncate">
+          <strong>{{ remain.Description }}</strong>
+        </ion-col>
+        <ion-col width-10>
+          <!--<ion-icon name="ios-alarm-outline" icon-right [hidden]="!remain.active"></ion-icon>-->
+          <ion-icon name="ios-alarm" icon-right [hidden]="remain.active"></ion-icon>
+
+        </ion-col>
+      </ion-row>
+      <!--<ion-icon name="ios-alarm" item-right></ion-icon>-->
+      <!--//</ion-col>-->
+    </ion-item>
+     <ion-item-options side="right">
+        <!--<button ion-button (click)="openEdit()">Edit</button>-->
+                <!--<button ion-button (click)="updateRemainder(remain)">Edit</button>-->
+        <button ion-button color="danger" (click)="deleteRemainder(remain)">Delete</button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

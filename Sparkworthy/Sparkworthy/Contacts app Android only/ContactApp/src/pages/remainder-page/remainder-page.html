@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-navbar color="navigationBarColor">
+    <ion-title>Reminder</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="addRemainder()">
+        <ion-icon icon-right name="md-add" id="addIcon">
+        </ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-item-sliding *ngFor="let remain of remainderofContact">
+      <ion-item (click)="viewRemainder(remain)">
+        <ion-row class="flex-sb">
+          <ion-col width-33>
+            <ion-row>
+              <p class="text-xs">{{ remain.Date | date:'mediumDate' }}</p>
+            </ion-row>
+            <ion-row>
+              <p class="text-xs">
+                {{ remain.timehr }}
+              </p>
+            </ion-row>
+          </ion-col>
+          <ion-col width-50 class="truncate">
+            {{ remain.Description }}
+          </ion-col>
+          <ion-col width-10>
+            <!--<ion-icon name="ios-alarm-outline" icon-right [hidden]="!remain.active"></ion-icon>-->
+            <ion-icon name="ios-alarm" icon-right [hidden]="remain.active"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+      <ion-item-options side="right">
+        <!--<button ion-button (click)="openEdit()">Edit</button>-->
+                <button ion-button (click)="updateRemainder(remain)">Edit</button>
+        <button ion-button color="danger" (click)="deleteRemainder(remain)">Delete</button>
+      </ion-item-options>
+    </ion-item-sliding>
+        <ion-item [hidden]="bool"><div text-center><span color="medium">No Reminder</span></div></ion-item>
+  </ion-list>
+  <!--<ion-item-divider>
+    Others
+  </ion-item-divider>-->
+  <!--<ion-list *ngFor="let remain of allRemainderofContact">
+      <ion-item>
+        <ion-row class="flex-sb">
+          <ion-col width-33>
+            <ion-row>
+              <p class="text-xs">{{ remain.SetTime | date:'mediumDate' }}</p>
+            </ion-row>
+            <ion-row>
+              <p class="text-xs">{{ remain.time}}</p>
+            </ion-row>
+          </ion-col>
+          <ion-col width-50 class="truncate">
+            {{ remain.Description }}
+          </ion-col>
+          <ion-col width-10><ion-icon name="ios-alarm-outline" icon-right></ion-icon></ion-col>
+        </ion-row>
+      </ion-item>
+  </ion-list>-->
+</ion-content>

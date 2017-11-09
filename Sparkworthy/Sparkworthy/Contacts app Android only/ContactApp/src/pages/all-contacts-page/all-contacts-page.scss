@@ -1,0 +1,74 @@
+page-all-contacts-page {
+
+.contacts-list ion-item-divider{
+  background-color: #eee;
+  font-size: 18px;
+  font-weight: bold;
+  color: #222;
+  border-bottom:none;
+  border-top:1px solid #dedede;
+}
+ion-item-group .item-wrapper:last-child .item-inner{
+  border:none;
+}
+
+  .custom-inner-tab{
+    padding: 12px 0;
+    border-bottom: 1px solid #4A4343;
+    //background-color:#ff4b2e ;
+    background-color:#EC8428 ;
+    margin-top: -12px;
+    height: 52px;
+  }
+  //.custom-inner-tab + div .list {
+  //  margin:0;
+  //}
+  //.custom-inner-tab + div .list > .item-block{
+  //  border-top:none;
+  //}
+  .custom-inner-tab .segment .segment-button{
+    border-radius: 0;
+    background:transparent;
+    border:none;
+    color: #ffffff;
+    padding: 5px 0;
+    overflow: visible;
+    height: auto;
+  }
+  .custom-inner-tab .segment .segment-button.segment-activated{
+    background: #ffffff;
+    color:#EC8428;
+  }
+  //.custom-inner-tab .segment .segment-button.segment-activated:after{
+  //  content:"";
+  //  border-left:8px solid transparent;
+  //  border-right:8px solid transparent;
+  //  border-bottom:8px solid #4A4343;
+  //  position: absolute;
+  //  bottom:-13px;
+  //  left:50%;
+  //  margin-left: -8px;
+  //  z-index: 2;
+  //}
+  //.custom-inner-tab .segment .segment-button.segment-activated:before{
+  //  content:"";
+  //  border-left:8px solid transparent;
+  //  border-right:8px solid transparent;
+  //  border-bottom:8px solid #fff;
+  //  position: absolute;
+  //  bottom:-14px;
+  //  left:50%;
+  //  margin-left: -8px;
+  //  z-index: 3;
+  //}
+
+
+
+  // .ion-md-add-circle:before {
+  //   content: "\f272";
+  //   font-size: 32px;
+  //   margin-top: 10px;
+  //   color:#ff4b2e;
+  //   margin-right: 3px;
+  // }
+}

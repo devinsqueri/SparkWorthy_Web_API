@@ -1,0 +1,32 @@
+
+<ion-header>
+
+  <ion-navbar color="navigationBarColor">
+
+    <ion-title>Add an account</ion-title>
+    <ion-buttons right>
+      <button  ion-button (click)="skipBtn()">Skip</button>
+    </ion-buttons >
+
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+
+  <ion-list>
+    <!--ion-item>
+      <ion-icon item-left class="iconClass" ><img src="assets/icon/Outlook-icon.png"></ion-icon>
+      <ion-label>Outlook Contacts</ion-label>
+      <ion-checkbox color="dark" checked="true" item-right ></ion-checkbox>
+    </ion-item-->
+    <ion-item>
+      <ion-icon item-left class="iconClass" ><img src="assets/icon/Mobile-book-icon.png"></ion-icon>
+      <ion-label>Mobile Contacts</ion-label>
+      <ion-checkbox color="dark" checked="false" item-right value="checked" [(ngModel)]="value"  (click)="selected()" ></ion-checkbox>
+    </ion-item>
+  </ion-list>
+  <button ion-button class="btn" id="syncBtn" (click)="syncBtnAction()" color="appButtonColor" [disabled]="bool" >Sync Your Contacts</button>
+
+</ion-content>

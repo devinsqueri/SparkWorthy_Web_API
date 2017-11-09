@@ -1,0 +1,108 @@
+
+<ion-header>
+
+  <ion-navbar color="navigationBarColor">
+    <ion-title>Create Account</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="createUserAccount" (submit)="addUserToAPi()">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Name</ion-label>
+        <ion-input type="text" formControlName="name" id="name"></ion-input>
+        <!--<control-messages [control]="createUserAccount.controls.gname"></control-messages>-->
+      </ion-item>
+      <p class="errorMsg" *ngIf="!createUserAccount.controls['name'].valid && createUserAccount.controls['name'].touched ">Please enter a name</p>
+      <ion-item>
+        <ion-label floating>Birthday</ion-label>
+        <ion-datetime displayFormat="MMM DD, YYYY" formControlName="dob" id="dob"></ion-datetime>
+      </ion-item>
+      <p class="errorMsg" *ngIf="!createUserAccount.controls['dob'].valid && createUserAccount.controls['dob'].touched">Please enter a birthday</p>
+      <ion-item>
+          <ion-label floating>Phone Number</ion-label>
+          <ion-input type="number" formControlName="phonenumber" id="phonenumber" ></ion-input>
+      </ion-item>
+      <p class="errorMsg"  *ngIf="!createUserAccount.controls['phonenumber'].valid && createUserAccount.controls['phonenumber'].touched">Please enter 10 digit phone number</p>
+
+      <ion-item>
+        <ion-label floating>Email Id</ion-label>
+        <ion-input type="text" formControlName="email" id="email" ></ion-input>
+      </ion-item>
+      <p class="errorMsg" *ngIf="!createUserAccount.controls['email'].valid && createUserAccount.controls['email'].touched">Enter a valid email</p>
+      <p class="errorMsg" *ngIf="createUserAccount.controls['email'].valid && createUserAccount.controls['email'].touched && bool()">Enter a valid email</p>
+      <p class="errorMsg" *ngIf="emailexist">Email already taken.Try again with another email</p>
+
+      <ion-item>
+        <ion-label floating>Password</ion-label>
+        <ion-input type="password" formControlName="password" id="password"></ion-input>
+      </ion-item>
+      <p class="errorMsg" *ngIf="!createUserAccount.controls['password'].valid && createUserAccount.controls['password'].touched">Enter a password</p>
+      <ion-item>
+        <ion-label floating>Confirm Password</ion-label>
+        <ion-input type="password" formControlName="conPassword" id="conPassword"></ion-input>
+      </ion-item>
+      <p class="errorMsg" *ngIf="!createUserAccount.controls['conPassword'].valid && createUserAccount.controls['conPassword'].touched">Re type your password</p>
+      <p class="errorMsg" *ngIf="createUserAccount.controls['conPassword'].valid && createUserAccount.controls['conPassword'].touched && createUserAccount.controls['conPassword'].value != createUserAccount.controls['password'].value ">Password mismatched. Check the password</p>
+
+
+      <!--<ion-item >-->
+        <!--<ion-label floating>Interest</ion-label>-->
+        <!--<ion-input type="text" formControlName="interest" id="interest" [disabled]="true" (click)="presentInterestModal()"></ion-input>-->
+      <!--</ion-item>-->
+
+      <ion-item>
+        <ion-label floating>Company</ion-label>
+        <ion-input type="text" formControlName="company" id="company"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Company website-Feed Link</ion-label>
+        <ion-input type="text" formControlName="websitelink" id="websitelink"></ion-input>
+
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Position</ion-label>
+        <ion-input type="text" formControlName="position" id="position"></ion-input>
+      </ion-item>
+      <!--<ion-row>-->
+        <!--<ion-col>-->
+          <!--<ion-item>-->
+            <!--<ion-label floating>Country</ion-label>-->
+            <!--<ion-input type="text" formControlName="country" id="country"></ion-input>-->
+          <!--</ion-item>-->
+        <!--</ion-col>-->
+        <!--<ion-col>-->
+          <!--<ion-item>-->
+            <!--<ion-label floating>City</ion-label>-->
+            <!--<ion-input type="text" formControlName="city" id="city"></ion-input>-->
+          <!--</ion-item>-->
+        <!--</ion-col>-->
+      <!--</ion-row>-->
+      <!--<ion-row>-->
+        <!--<ion-col>-->
+          <!--<ion-item>-->
+            <!--<ion-label floating>State</ion-label>-->
+            <!--<ion-input type="text" formControlName="state" id="state"></ion-input>-->
+          <!--</ion-item>-->
+        <!--</ion-col>-->
+        <!--<ion-col>-->
+          <!--<ion-item>-->
+            <!--<ion-label floating>Zip Code</ion-label>-->
+            <!--<ion-input type="number" formControlName="zipcode" id="zipcode"></ion-input>-->
+          <!--</ion-item>-->
+        <!--</ion-col>-->
+      <!--</ion-row>-->
+    </ion-list>
+    <div id="btnDiv">
+      <button ion-button class="btn" id="createAccBtn" type="submit" [disabled]="!createUserAccount.valid || emailexist" >Create Account</button>
+    </div>
+  </form>
+  <div id="footerDiv">
+    <p id="footerTxt"> Already have an account? <strong (click)="navigateBackToSignIn()">Sign In</strong></p>
+  </div>
+
+</ion-content>

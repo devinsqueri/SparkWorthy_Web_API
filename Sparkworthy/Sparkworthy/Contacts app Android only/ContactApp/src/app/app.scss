@@ -1,0 +1,547 @@
+// http://ionicframework.com/docs/v2/theming/
+
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+body{
+  font-size:18px;
+  color:#000;
+}
+
+.item-datetime .label-md, .item-input .label-md, .item-select .label-md {
+  color: #EC8428;
+}
+
+.item-md .item-ios{
+  font-size:18px;
+}
+.item-divider-md {
+  font-size:18px;
+  color:#000;
+  padding-left:26px;
+}
+.text-xs{
+	font-size:8px;
+}
+.text-sm{
+	font-size:12px;
+}
+.item-md ion-avatar ion-img, .item-md ion-avatar img{
+    width: 60px;
+    height: 60px;
+}
+ion-title{
+  text-align:center;
+}
+.profileImg {
+    margin: 0 auto;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    vertical-align: middle;
+    overflow:hidden;
+    position:relative;
+    
+    img {
+      top:0;
+      bottom:0;
+      left:0;
+      right:0;
+      margin:auto;
+      width: 140px;
+      height: 140px;
+    }
+
+    .upload-img-btn{
+      position: absolute;
+      left: 0;
+      margin: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.3);
+      overflow: visible;
+    }
+}
+.dp-block
+  {
+    width: 100%;
+    height: 30%;
+    background-color: #E8E8E8;
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    min-height: 200px;
+    text-align: center;
+    position:relative;
+    overflow:hidden;
+
+    img {
+      position: absolute;
+      top:0;
+      bottom:0;
+      left:0;
+      right:0;
+      margin:auto;
+    }
+    .upload-img-btn{
+      position: absolute;
+      right:16px;
+      bottom:16px;
+    }
+  }
+.segment-md .segment-button.activated, .segment-md .segment-button.segment-activated {
+    border-color: #EC8428;
+    background: #EC8428;
+    color: #fff;
+}
+.bar-buttons-md[right] {
+    flex: 1;
+}
+.item-md [item-right] .item-ios{
+  margin:9px 13px 9px 0;
+}
+.item-md.item-block .item-inner .item-ios{
+  padding-right:13px;
+}
+ion-item.item {
+    padding-left: 26px;
+}
+.label-md .label-ios{
+  margin:13px 13px 13px 0;
+}
+ion-item-divider .label-md .label-ios {
+    margin: 6px 8px 6px 0;
+}
+.item-input .label-md, .item-select .label-md, .item-datetime .label-md .label-ios .ion-label[stacked], ion-label[floating]{
+  color:#EC8428;
+}
+.item-md.item-input.ng-valid.input-has-value:not(.input-has-focus) .item-inner{
+  border-bottom-color: #dedede;
+  box-shadow: inset 0 -1px 0 0 #dedede;
+}
+.list-md .item-input.ng-valid.input-has-value:not(.input-has-focus):last-child{
+  border-bottom-color: #dedede;
+  box-shadow: inset 0 -1px 0 0 #dedede;
+}
+.flex-sb{
+  justify-content: space-between;
+}
+.truncate{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
+.toolbar-content-md{
+  position:absolute;
+  left:0;
+  right:0;
+  top:16px;
+  width:75%;
+  margin:auto;
+}
+page-home-page .toolbar-content-md{
+  position:static;
+
+}
+page-home-page .toolbar-ios ion-title{
+  position: absolute;
+  top: 0;
+  right: 0;
+  left:auto;
+  padding: 0 0px 1px;
+  width: 30%;
+  height: 100%;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  pointer-events: none;
+}
+page-add-account-page #syncBtn {
+  position: absolute;
+  bottom: 20px;
+  width: 90%;
+  margin-left: 5%;
+  height: 40px;
+}
+
+page-add-account-page .iconClass {
+  width: 30px;
+  height: 30px;
+}
+
+page-all-contacts-page .custom-inner-tab {
+  padding: 12px 0;
+  border-bottom: 1px solid #4A4343;
+  background-color: #EC8428;
+  margin-top: -12px;
+  height: 52px;
+}
+
+page-all-contacts-page .custom-inner-tab .segment .segment-button {
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  padding: 5px 0;
+  overflow: visible;
+  height: auto;
+}
+
+page-all-contacts-page .custom-inner-tab .segment .segment-button.segment-activated {
+  background: #ffffff;
+  color: #EC8428;
+}
+
+page-company-news-feed-page .post-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+page-company-news-feed-page .post-content {
+  margin-bottom: 10px;
+}
+
+page-company-news-feed-page .post-info {
+  color: #aaa;
+  font-size: 12px;
+}
+
+page-company-news-feed-page .post-info span {
+  margin-right: 5px;
+}
+
+page-company-news-feed-page .read-more {
+  float: right;
+  font-size: 12px;
+}
+
+page-create-account-page #footerDiv {
+  height: 25px;
+  width: 100%;
+  background-color: #2d2d2d;
+}
+
+page-create-account-page #createAccBtn {
+  width: 90%;
+}
+
+page-create-account-page #btnDiv {
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  margin-top: 30px;
+}
+
+page-create-account-page #footerTxt {
+  color: #f8fffb;
+  text-align: center;
+  top: 4px;
+  position: relative;
+}
+
+page-edit-contact-page #imgCol {
+  text-align: center;
+}
+
+page-edit-contact-page #profileTxt {
+  margin-top: 8%;
+}
+
+page-edit-contact-page .roundBtn {
+  text-align: center;
+  width: 80px;
+  height: 80px;
+  padding: 3px;
+  border: 2px solid #EC8428;
+  border-radius: 50%;
+  vertical-align: middle;
+  background-color: #fff;
+  box-shadow:none;
+}
+
+page-edit-contact-page .ionColl {
+  text-align: center;
+}
+
+page-edit-contact-page .iconClass {
+  display: inline-block;
+  width: 45px;
+  height: 45px;
+  vertical-align: middle;
+  margin: 0 auto;
+}
+
+page-edit-contact-page .iconClass img {
+  max-height: 45px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+ul.rating li {
+  background: none;
+  color: #EC8428;
+}
+
+ul.rating li ion-icon {
+  font-size: 25px;
+}
+
+.rating {
+  padding: 0px;
+}
+
+li {
+  margin: -5px;
+}
+
+page-edit-inner-circle-page #notesEdit {
+  text-align: -webkit-right;
+}
+
+page-group-edit-page #iconAddGroupAdd {
+  right: 10px;
+  top: 10px;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+}
+
+page-home-page .user-profile .name {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+page-home-page .user-profile .avatar {
+  display: inline-block;
+  vertical-align: middle;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-left: 10px;
+}
+
+page-home-page .iconClass {
+  width: 20px;
+  height: 20px;
+}
+
+page-home-tab .tabs-md .tab-button-icon {
+  font-size: 3rem;
+  line-height: 0.8;
+}
+
+page-inner-circle-page #nameId {
+  margin-top: 25px;
+}
+
+page-inner-circle-page #addIcon {
+  font-size: 32px;
+}
+
+page-interest-news-page #mainDiv {
+  width: 100%;
+  height: 100%;
+}
+
+page-interest-news-page .slideClass {
+  height: 85%;
+  margin-top: 36px;
+}
+
+page-interest-news-page #slideId {
+  background-color: #4a4a4a;
+}
+
+page-interest-news-page .swiper-pagination-bullet-active {
+  opacity: 1;
+  background: aliceblue;
+}
+
+page-interest-news-page .swiper-pagination-bullet {
+  background: #f8fffb;
+}
+
+page-interest-news-page .iconId {
+  bottom: 8px;
+  position: absolute;
+  left: 8px;
+}
+page-interest-page #nameId {
+  margin-top: 25px;
+}
+
+page-interest-page .iconClass {
+  width: 25px;
+  height: 25px;
+}
+
+page-interest-page #addIcon {
+  font-size: 32px;
+}
+
+page-location-news-feed-page .post-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+page-location-news-feed-page .post-content {
+  margin-bottom: 10px;
+}
+
+page-location-news-feed-page .post-info {
+  color: #aaa;
+  font-size: 12px;
+}
+
+page-location-news-feed-page .post-info span {
+  margin-right: 5px;
+}
+
+page-location-news-feed-page .read-more {
+  float: right;
+  font-size: 12px;
+}
+
+page-remainder-add-update #createAccBtn {
+  width: 100%;
+}
+
+page-remainder-page #commandId {
+  position: absolute;
+  margin-left: 89px;
+  margin-top: 14px;
+}
+
+page-remainder-page #addIcon {
+  font-size: 32px;
+}
+
+page-remainder-page .ionClass {
+  background-color: #2ec95c;
+}
+
+page-settings-page #profleTxtId {
+  position: absolute;
+  margin-top: 35%;
+}
+
+page-settings-page #editIconCol {
+  text-align: -webkit-right;
+  margin-right: 17px;
+}
+
+page-settings-page #profileTxtCol {
+  text-align: -webkit-center;
+  margin-top: -9px;
+}
+
+page-settings-page #iconCol {
+  text-align: -webkit-right;
+}
+
+page-settings-page #comapanyName {
+  margin-left: -5px;
+}
+
+page-settings-page .ion-md-home:before {
+  content: "\f30c";
+  font-size: 25px;
+}
+
+page-settings-page #iconColLoc {
+  height: 30px;
+  text-align: -webkit-right;
+}
+
+page-settings-page .iconClass {
+  color: #ff4b2e;
+}
+
+page-sign-in-page .content-wrapper {
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  padding: 16px;
+}
+
+page-sign-in-page .logo-wrapper {
+  width: 70%;
+  margin: 0 auto 20px;
+}
+
+page-sign-in-page #circle {
+  background: #fff;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  bottom: 18px;
+  position: absolute;
+  left: 50%;
+  margin-left: -11px;
+}
+
+page-sign-in-page #mainDiv {
+  width: 90%;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+page-sign-in-page #innerBox1 {
+  width: 45%;
+  height: 25px;
+  padding: 4px;
+  float: left;
+}
+
+page-sign-in-page #innerBox2 {
+  width: 45%;
+  height: 25px;
+  padding: 4px;
+  float: right;
+}
+
+page-sign-in-page #cirlceTxt {
+  text-align: center;
+  line-height: 22px;
+  margin: 0;
+}
+
+page-sign-in-page .link {
+  text-decoration: none;
+}
+
+page-trending-page .post-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+page-trending-page .post-content {
+  margin-bottom: 10px;
+}
+
+page-trending-page .post-info {
+  color: #aaa;
+  font-size: 12px;
+}
+
+page-trending-page .post-info span {
+  margin-right: 5px;
+}
+
+page-trending-page .read-more {
+  float: right;
+  font-size: 12px;
+}
+

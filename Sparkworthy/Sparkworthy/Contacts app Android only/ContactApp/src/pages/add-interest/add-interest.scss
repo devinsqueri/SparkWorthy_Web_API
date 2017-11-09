@@ -1,0 +1,19 @@
+page-add-interest {
+  .colAdd{
+    width: 15%;
+  }
+  [col-10] {
+    -webkit-flex: 0 0 83.33333%;
+    -ms-flex: 0 0 83.33333%;
+    flex: 0 0 83.33333%;
+    width: 80%;
+    max-width: 83.33333%;
+  }
+  tag, .ng2-tag-input__text-input{
+    font-size:1.45em !important;
+  }
+  delete-icon svg{
+    vertical-align: middle !important;
+  }
+
+}

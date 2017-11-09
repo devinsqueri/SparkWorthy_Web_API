@@ -1,0 +1,30 @@
+page-create-account-page {
+  #footerDiv
+  {
+    height: 25px;
+    width: 100%;
+    background-color: #2d2d2d;
+  }
+  #createAccBtn
+  {
+    width: 90%;
+  }
+  #btnDiv
+  {
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    margin-top: 30px;
+  }
+  #footerTxt
+  {
+    color: #f8fffb;
+    text-align: center;
+    top: 4px;
+    position: relative;
+  }
+  .errorMsg{
+    padding-left: 26px;
+    color: red;
+  }
+}

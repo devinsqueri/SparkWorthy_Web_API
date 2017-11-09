@@ -1,0 +1,56 @@
+<!--
+  Generated template for the GroupEditPage page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="navigationBarColor">
+    <ion-title>Edit Group</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="saveEditedGroup()">Save</button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+
+  <div id="groupEditBlock" class="dp-block"  style="background-image: url(assets/Images/profile.jpg)">
+    <lazy-img inputSrc="{{groupDetails.ProfilePicture}}" (click)="presentActionSheet()" [hidden]="profilePicUpdated" class="coverPic"></lazy-img>
+    <!--<img src="{{groupDetails.ProfilePicture}}" (click)="presentActionSheet()" [hidden]="profilePicUpdated">-->
+
+    <img src="{{imageStr}}" class="coverPic" (click)="presentActionSheet()" [hidden]="!profilePicUpdated">
+
+    <!--<h3 [hidden]="lastImage !== null">Please Select Image!</h3>-->
+
+    <!--<button ion-button icon-only clear color="dark" class="upload-img-btn" >
+        <ion-icon name="camera"></ion-icon>
+      </button>-->
+
+    <ion-icon icon-right id="iconAddGroupAdd" (click)="openContactsList()">
+      <img src="assets/icon/group-add.png">
+    </ion-icon>
+  </div>
+  <ion-item>
+    <ion-label floating>Group Name</ion-label>
+    <ion-input type="text" [(ngModel)]="groupname"></ion-input>
+  </ion-item>
+  <!--<ion-item>
+    <ion-label>{{groupDetails.GroupName}}</ion-label>
+  </ion-item>-->
+  <ion-list>
+    <ion-item-sliding *ngFor="let con of contactList">
+      <ion-item (click)="openContactEditPage(con)">
+        <ion-avatar item-left>
+          <lazy-img inputSrc="{{con.profilepic}}"></lazy-img>
+        </ion-avatar>
+        <span>{{con.firstname}} {{con.lastname}}</span>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="danger" (click)="deleteGroupContact(con)">Delete</button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>
