@@ -1,0 +1,78 @@
+﻿using ContactAppAPI.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+
+namespace ContactAppAPI.Controllers.Contact
+{
+    public class InterestController : ApiController
+    {
+
+        #region "Get Interest List" 
+
+        /// <summary>
+        /// Get interest list
+        /// </summary>
+        /// <param name="UserId">User Id</param>
+        /// <param name="ContactId">Contact Id</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetInterestList")]
+        public IHttpActionResult GetInterestList(int UserId, int ContactId)
+        {
+            DataTable dtGetInterestList = new DataTable();
+            InterestModels interestModels = new InterestModels();
+            interestModels.UserId = UserId;
+            interestModels.ContactId = ContactId;
+            dtGetInterestList = interestModels.GetInterestList();
+            return Ok(dtGetInterestList);
+        }
+
+        #endregion
+
+        #region "Add New Interest" 
+
+        /// <summary>
+        /// Add new interest
+        /// </summary>
+        /// <param name="interestModels">interestModels objects</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddNewInterest")]
+        public IHttpActionResult AddNewInterest(InterestModels interestModels)
+        {
+            bool Status = false;
+            Status = interestModels.SaveInterest();
+            return Ok(Status);
+        }
+
+        #endregion
+
+        #region "Delete Interest" 
+
+        /// <summary>
+        /// Delete interest
+        /// </summary>
+        /// <param name="UserId">UserId</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("DeleteInterest")]
+        public IHttpActionResult DeleteInterest(int UserId, int ContactId, int InterestId)
+        {
+            bool Status = false;
+            InterestModels interestModels = new InterestModels();
+            interestModels.UserId = UserId;
+            interestModels.ContactId = ContactId;
+            interestModels.InterestId = InterestId;
+            Status = interestModels.DeleteInterest();
+            return Ok(Status);
+        }
+
+        #endregion
+        
+    }
+}

@@ -1,0 +1,247 @@
+﻿using ContactAppAPI.CommonUpdates;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+
+namespace ContactAppAPI.Models.Group
+{
+    public class GroupModels
+    {
+
+        #region "Property
+
+        /// <summary>
+        /// get or set the GroupId
+        /// </summary>
+        public int GroupId { get; set; }
+
+        /// <summary>
+        /// get or set the UserId
+        /// </summary>
+        public int UserId { get; set; }
+
+        /// <summary>
+        /// get or set the GroupName
+        /// </summary>
+        public string GroupName { get; set; }
+
+        /// <summary>
+        /// get or set the GroupProfilePicture
+        /// </summary>
+        public string GroupProfilePicture { get; set; }
+
+        /// <summary>
+        /// get or set the CreatedOn
+        /// </summary>
+        public DateTime CreatedOn { get; set; }
+
+        /// <summary>
+        /// get or set the ModifiedOn
+        /// </summary>
+        public DateTime ModifiedOn { get; set; }
+
+        /// <summary>
+        /// get or set the Group contact id
+        /// </summary>
+        public int GroupContactId { get; set; }
+
+        /// <summary>
+        /// get or set the contact id
+        /// </summary>
+        public string ContactListId { get; set; }
+
+        /* Properties to display the group contacts */
+
+        public DateTime GroupCreatedOn { get; set; }
+
+        public DateTime GroupModifiedOn { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string Email { get; set; }
+
+        public string PhoneNumber { get; set; }
+
+        public string OfficeNumber { get; set; }
+
+        public string Position { get; set; }
+
+        public string Company { get; set; }
+
+        public string Relative { get; set; }
+
+        public string ContactProfilePicture { get; set; }
+
+        public string Profession { get; set; }
+
+        public DateTime DateOfBirth { get; set; }
+
+        public bool IsFavorites { get; set; }
+
+        public int FavoriteRating { get; set; }
+
+        public string Notes { get; set; }
+
+        public int ContactId { get; set; }
+
+        #endregion
+
+        #region "Public Methods"
+
+
+        /// <summary>
+        /// insert group
+        /// </summary>
+        /// <returns></returns>
+        public string ImportContactsToGroup()
+        {
+            SqlCommand sqlcommand = new SqlCommand("usp_insert_contacts_to_group");
+            sqlcommand.CommandType = CommandType.StoredProcedure;
+            sqlcommand.Parameters.AddWithValue("@GroupId", this.GroupId.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@ContactListId", this.ContactListId.ToString().Trim());
+            DBOperations dbOperation = new DBOperations();
+            string outputValue = string.Empty;
+            bool Status = dbOperation.SaveData(sqlcommand, out outputValue, "");
+            if (Status)
+                return "true";
+            else
+                return "false";
+        }
+
+
+        /// <summary>
+        /// insert group
+        /// </summary>
+        /// <returns></returns>
+        public string DeleteContactsFromGroup()
+        {
+            SqlCommand sqlcommand = new SqlCommand("usp_delete_contacts_from_group");
+            sqlcommand.CommandType = CommandType.StoredProcedure;
+            sqlcommand.Parameters.AddWithValue("@GroupId", this.GroupId.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@ContactListId", this.ContactListId.ToString().Trim());
+            DBOperations dbOperation = new DBOperations();
+            string outputValue = string.Empty;
+            bool Status = dbOperation.SaveData(sqlcommand, out outputValue, "");
+            if (Status)
+                return "true";
+            else
+                return "false";
+        }
+
+        /// <summary>
+        /// insert group
+        /// </summary>
+        /// <returns></returns>
+        public string AddGroup()
+        {
+            SqlCommand sqlcommand = new SqlCommand("usp_insert_group");
+            sqlcommand.CommandType = CommandType.StoredProcedure;
+            sqlcommand.Parameters.AddWithValue("@UserId", this.UserId.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@GroupName", this.GroupName.ToString().Trim());
+            sqlcommand.Parameters.Add("@IdOut", SqlDbType.Int).Direction = ParameterDirection.Output;
+            DBOperations dbOperation = new DBOperations();
+            string outputValue = string.Empty;
+            bool Status = dbOperation.SaveData(sqlcommand, out outputValue, "@IdOut");
+            if (Status)
+                return outputValue;
+            else
+                return "false";
+        }
+
+        /// <summary>
+        /// update group
+        /// </summary>
+        /// <returns></returns>
+        public string UpdateGroup()
+        {
+            SqlCommand sqlcommand = new SqlCommand("usp_update_group");
+            sqlcommand.CommandType = CommandType.StoredProcedure;
+            sqlcommand.Parameters.AddWithValue("@GroupId", this.GroupId.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@GroupName", this.GroupName.ToString().Trim());
+            DBOperations dbOperation = new DBOperations();
+            string outputValue = string.Empty;
+            bool Status = dbOperation.SaveData(sqlcommand, out outputValue, "");
+            if (Status)
+                return "true";
+            else
+                return "false";
+        }
+
+        /// <summary>
+        /// Delete group
+        /// </summary>
+        /// <returns></returns>
+        public bool DeleteGroup()
+        {
+            SqlCommand sqlCommand = new SqlCommand("usp_delete_group");
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@GroupId", this.GroupId.ToString().Trim());
+            DBOperations dbOeration = new DBOperations();
+            string outputValue = string.Empty;
+            bool Status = dbOeration.DeleteData(sqlCommand);
+            if (Status)
+                return true;
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// Upload profile picture
+        /// </summary>
+        /// <returns></returns>
+        public bool UploadProfilePicture()
+        {
+            SqlCommand sqlCommand = new SqlCommand("usp_upload_group_profile_picture");
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@GroupId", this.GroupId.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@GroupProfilePicture", this.GroupProfilePicture.ToString().Trim());
+            DBOperations dbOeration = new DBOperations();
+            string outputValue = string.Empty;
+            bool Status = dbOeration.SaveData(sqlCommand, out outputValue, "");
+            if (Status)
+                return true;
+            else
+                return false;
+        }
+
+        #endregion
+
+        #region "Private Methods"
+
+        /// <summary>
+        /// Get group list details
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        protected internal DataTable GetGroupList(int UserId)
+        {
+            SqlCommand sqlCommand = new SqlCommand("usp_get_group_list");
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@UserId", UserId.ToString().Trim());
+            DBOperations dbOperations = new DBOperations();
+            return dbOperations.GetTableData(sqlCommand);
+        }
+
+        /// <summary>
+        /// Get group contact list details
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        protected internal DataTable GetGroupContacts(int GroupId)
+        {
+            SqlCommand sqlCommand = new SqlCommand("usp_get_group_contacts");
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@GroupId", GroupId.ToString().Trim());
+            DBOperations dbOperations = new DBOperations();
+            return dbOperations.GetTableData(sqlCommand);
+        }
+
+        #endregion"
+
+    }
+}

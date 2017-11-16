@@ -1,0 +1,155 @@
+﻿using ContactAppAPI.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+
+namespace ContactAppAPI.Controllers.Contact
+{
+    [RoutePrefix("api/interest")]
+    public class InterestController : ApiController
+    {
+
+        #region "Get Interest List" 
+
+        /// <summary>
+        /// Get interest list
+        /// </summary>
+        /// <param name="UserId">User Id</param>
+        /// <param name="ContactId">Contact Id</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("contactinterest")]
+        [AllowAnonymous]
+        public HttpResponseMessage GetInterestList(int ContactId)
+        {
+            InterestModels interestModels = new InterestModels();
+            List<InterestModels> interestModelList = new List<InterestModels>();
+            interestModels.ContactId = ContactId;
+            interestModelList = this.GetInterestDetails(interestModels);
+            return Request.CreateResponse(HttpStatusCode.OK, interestModelList);
+        }
+
+        public List<InterestModels> GetInterestDetails(InterestModels interestModels)
+        {
+            List<InterestModels> interestModelsList = new List<InterestModels>();
+            if (!string.IsNullOrEmpty(Convert.ToString(interestModels.ContactId)))
+            {
+                DataTable dtGetUsers = new DataTable();
+                dtGetUsers = interestModels.GetInterestList();
+                if (dtGetUsers.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtGetUsers.Rows)
+                    {
+                        InterestModels InterestTypes = new InterestModels();
+                        InterestTypes.InterestedId = Convert.ToInt32(dr[0]);
+                        InterestTypes.ContactId = Convert.ToInt32(dr[1]);
+                        InterestTypes.InterestId = Convert.ToInt32(dr[2]);
+                        InterestTypes.InterestName = Convert.ToString(dr[3]);
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[4])))
+                            InterestTypes.Description = Convert.ToString(dr[4]);
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[5])))
+                            InterestTypes.CreatedOn = Convert.ToDateTime(dr[5]);
+                        interestModelsList.Add(InterestTypes);
+                    }
+                }
+            }
+            return interestModelsList;
+        }
+
+
+        /// <summary>
+        /// Get interest list
+        /// </summary>
+        /// <param name="UserId">User Id</param>
+        /// <param name="ContactId">Contact Id</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("viewInterestProfiles")]
+        [AllowAnonymous]
+        public HttpResponseMessage ViewInterestProfiles(int InterestId)
+        {
+            InterestModels interestModels = new InterestModels();
+            List<InterestModels> interestModelList = new List<InterestModels>();
+            interestModels.InterestId = InterestId;
+            interestModelList = this.viewInterestSummary(interestModels);
+            return Request.CreateResponse(HttpStatusCode.OK, interestModelList);
+        }
+
+        public List<InterestModels> viewInterestSummary(InterestModels interestModels)
+        {
+            List<InterestModels> interestModelsList = new List<InterestModels>();
+            if (!string.IsNullOrEmpty(Convert.ToString(interestModels.ContactId)))
+            {
+                DataTable dtGetUsers = new DataTable();
+                dtGetUsers = interestModels.ViewSpecificInterestPictures();
+                if (dtGetUsers.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtGetUsers.Rows)
+                    {
+                        InterestModels InterestTypes = new InterestModels();
+                        InterestTypes.InterestedId = Convert.ToInt32(dr[0]);
+                        InterestTypes.InterestId = Convert.ToInt32(dr[1]);
+                        InterestTypes.PictureLocation = Convert.ToString(dr[2]);
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[3])))
+                            InterestTypes.Description = Convert.ToString(dr[3]);
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[4])))
+                            InterestTypes.InterestName = Convert.ToString(dr[4]);
+                        interestModelsList.Add(InterestTypes);
+                    }
+                }
+            }
+            return interestModelsList;
+        }
+
+
+
+        #endregion
+
+        #region "Add New Interest" 
+
+        /// <summary>
+        /// Add new interest
+        /// </summary>
+        /// <param name="interestModels">interestModels objects</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("save")]
+        [AllowAnonymous]
+        public IHttpActionResult AddNewInterest(int ContactId, int InterestId)
+        {
+            InterestModels interestModels = new InterestModels();
+            interestModels.ContactId = ContactId;
+            interestModels.InterestId = InterestId;
+            bool Status = false;
+            Status = interestModels.SaveInterest();
+            return Ok(Status);
+        }
+
+        #endregion
+
+        #region "Delete Interest" 
+
+        /// <summary>
+        /// Delete interest
+        /// </summary>
+        /// <param name="Id">Id</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("delete")]
+        public IHttpActionResult DeleteInterest(int Id)
+        {
+            bool Status = false;
+            InterestModels interestModels = new InterestModels();
+            interestModels.InterestedId = Id;
+            Status = interestModels.DeleteInterest();
+            return Ok(Status);
+        }
+
+        #endregion
+
+    }
+}

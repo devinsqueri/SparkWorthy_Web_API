@@ -1,0 +1,275 @@
+﻿using ContactAppAPI.Models;
+using ContactAppAPI.Models.Contact;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+
+namespace ContactAppAPI.Controllers.Contact
+{
+    [RoutePrefix("api/innercircle")]
+    public class InnerCircleController : ApiController
+    {
+
+        #region "Get InnerCircleList"
+
+        /// <summary>
+        /// Get interest list
+        /// </summary>
+        /// <param name="UserId">User Id</param>
+        /// <param name="ContactId">Contact Id</param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("GetInnerCircleList")]
+        public HttpResponseMessage GetInnerCircleList(int UserId, int ContactId)
+        {
+            InnerCircleModels innerCircleModels = new InnerCircleModels();
+            List<InnerCircleModels> innerCircleModelsList = new List<InnerCircleModels>();
+            innerCircleModels.UserId = UserId; innerCircleModels.ContactId = ContactId;
+            innerCircleModelsList = this.GetInnerCircleListList(innerCircleModels);
+            return Request.CreateResponse(HttpStatusCode.OK, innerCircleModelsList);
+        }
+
+
+        [HttpPost]
+        public List<InnerCircleModels> GetInnerCircleListList(InnerCircleModels contactModels)
+        {
+            List<InnerCircleModels> innerCircleModelsList = new List<InnerCircleModels>();
+            //if (!string.IsNullOrEmpty(Convert.ToString(contactModels.UserId)) && (contactModels.UserId != 0))
+            //{
+            //    DataTable dtContactList = new DataTable();
+            //    dtContactList = contactModels.GetInnerCircleList();
+            //    if (dtContactList.Rows.Count > 0)
+            //    {
+            //        foreach (DataRow dr in dtContactList.Rows)
+            //        {
+            //            InnerCircleModels contactModelsTypes = new InnerCircleModels();
+            //            contactModelsTypes.UserId = Convert.ToInt32(dr[0]);
+
+            //            contactModelsTypes.ContactId = Convert.ToInt32(dr[1]);
+
+            //            if (!string.IsNullOrEmpty(Convert.ToString(dr[2])))
+            //                contactModelsTypes.FirstName = Convert.ToString(dr[2]);
+
+            //            if (!string.IsNullOrEmpty(Convert.ToString(dr[3])))
+            //                contactModelsTypes.LastName = Convert.ToString(dr[3]);
+
+            //            if (!string.IsNullOrEmpty(Convert.ToString(dr[4])))
+            //                contactModelsTypes.Email = Convert.ToString(dr[4]);
+
+            //            if (!string.IsNullOrEmpty(Convert.ToString(dr[5])))
+            //                contactModelsTypes.PhoneNumber = Convert.ToString(dr[5]);
+
+            //            contactModelsTypes.OfficeNumber = Convert.ToString(dr[6]);
+
+            //            if (!string.IsNullOrEmpty(Convert.ToString(dr[7])))
+            //                contactModelsTypes.Position = Convert.ToString(dr[7]);
+
+            //            if (!string.IsNullOrEmpty(Convert.ToString(dr[8])))
+            //                contactModelsTypes.CompanyName = Convert.ToString(dr[8]);
+
+            //            if (!string.IsNullOrEmpty(Convert.ToString(dr[9])))
+            //                contactModelsTypes.RelativeORFamily = Convert.ToString(dr[9]);
+
+            //            if (!string.IsNullOrEmpty(Convert.ToString(dr[10])))
+            //                contactModelsTypes.ProfilePicture = Convert.ToString(dr[10]);
+
+            //            if (!string.IsNullOrEmpty(Convert.ToString(dr[11])))
+            //                contactModelsTypes.BirthdayOn = Convert.ToDateTime(dr[11]);
+
+            //            if (!string.IsNullOrEmpty(Convert.ToString(dr[12])))
+            //                contactModelsTypes.IsFavorite = Convert.ToBoolean(dr[12]);
+
+            //            contactModelsTypes.Rating = Convert.ToInt32(dr[13]);
+
+            //            contactModelsTypes.CreatedOn = Convert.ToDateTime(dr[14]);
+
+            //            if (!string.IsNullOrEmpty(Convert.ToString(dr[15])))
+            //                contactModelsTypes.ModifiedOn = Convert.ToDateTime(dr[15]);
+
+            //            contactModelsList.Add(contactModelsTypes);
+            //        }
+            //    }
+            //}
+            return innerCircleModelsList;
+        }
+
+        #endregion
+        
+        #region "Edit View"
+
+        /// <summary>
+        /// Get interest list
+        /// </summary>
+        /// <param name="UserId">User Id</param>
+        /// <param name="ContactId">Contact Id</param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("editView")]
+        public HttpResponseMessage EditViewContact(int ContactId)
+        {
+            List<ContactModels> ContactModelsList = new List<ContactModels>();
+            ContactModelsList = this.GetEditViewContactDetails(ContactId);
+            return Request.CreateResponse(HttpStatusCode.OK, ContactModelsList);
+        }
+
+        [HttpPost]
+        public List<ContactModels> GetEditViewContactDetails(int ContactId)
+        {
+            List<ContactModels> innerCircleModelsList = new List<ContactModels>();
+            {
+                InnerCircleModels innerCircleModels = new InnerCircleModels();
+                DataTable dtContactList = new DataTable();
+                dtContactList = innerCircleModels.GetEditViewInnerCircleList(ContactId);
+                if (dtContactList.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtContactList.Rows)
+                    {
+                        ContactModels contactModelsTypes = new ContactModels();
+
+                        contactModelsTypes.ContactId = Convert.ToInt32(dr[0]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[1])))
+                            contactModelsTypes.FirstName = Convert.ToString(dr[1]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[2])))
+                            contactModelsTypes.LastName = Convert.ToString(dr[2]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[3])))
+                            contactModelsTypes.RelativeORFamily = Convert.ToString(dr[3]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[4])))
+                            contactModelsTypes.Profession = Convert.ToString(dr[4]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[5])))
+                            contactModelsTypes.BirthdayOn = Convert.ToDateTime(dr[5]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[6])))
+                            contactModelsTypes.Annivasary = Convert.ToDateTime(dr[6]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[7])))
+                            contactModelsTypes.Notes = Convert.ToString(dr[7]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[8])))
+                            contactModelsTypes.InterestList = Convert.ToString(dr[8]);
+
+                        innerCircleModelsList.Add(contactModelsTypes);
+                    }
+                }
+            }
+
+            return innerCircleModelsList;
+        }
+
+
+        #endregion
+
+        #region "Add New Inner Circle"
+
+        /// <summary>
+        /// Add new interest
+        /// </summary>
+        /// <param name="InnerCircleModels">Inner Circle Models objects</param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("saveContact")]
+        public IHttpActionResult SaveNewContact(int UserId, int ContactId, string FName, string LName, string PhNo, string Position, string Company,
+            string Relation)
+        {
+            InnerCircleModels innerCircleModels = new InnerCircleModels();
+            ContactModels contactModels = new ContactModels();
+            innerCircleModels.InnerCircleId = 0;
+            innerCircleModels.UserId = UserId;
+            innerCircleModels.ContactId = ContactId;
+            contactModels.FirstName = FName;
+            contactModels.LastName = LName;
+            contactModels.PhoneNumber = PhNo;
+            contactModels.Position = Position;
+            contactModels.CompanyName = Company;
+            contactModels.RelativeORFamily = Relation;
+            string Status = string.Empty;
+            Status = innerCircleModels.SaveInnerCircle(innerCircleModels, contactModels);
+            return Ok(Status);
+        }
+
+        #endregion
+
+        #region "Add Existing Inner Circle"
+
+        /// <summary>
+        /// Add new interest
+        /// </summary>
+        /// <param name = "InnerCircleModels" > Inner Circle Models objects</param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("saveExistingContact")]
+        public IHttpActionResult ExistingContact(int ParentContactId, int ChildContactId, string Relation)
+        {
+            string Status = string.Empty;
+            InnerCircleModels innerCircleModels = new InnerCircleModels();
+            ContactModels contactModels = new ContactModels();
+            innerCircleModels.ContactId = ParentContactId;
+            innerCircleModels.RelationshipContactId = ChildContactId;
+            contactModels.RelativeORFamily = Relation;
+            Status = innerCircleModels.SaveExistingInnerCircle(innerCircleModels, contactModels);
+            return Ok(Status);
+        }
+
+        #endregion
+
+        #region "Delete Interest"
+        /// <summary>
+        /// Delete interest
+        /// </summary>
+        /// <param name="UserId">UserId</param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("delete")]
+        public IHttpActionResult DeleteInnerCircle(int InnerCircleId)
+        {
+            bool Status = false;
+            InnerCircleModels innerCircleModels = new InnerCircleModels();
+            Status = innerCircleModels.DeleteInnerCircle(InnerCircleId);
+            return Ok(Status);
+        }
+
+        #endregion
+
+        #region "Update Inner Circle"
+
+        /// <summary>
+        /// Save new contact
+        /// </summary>
+        /// <param name="contactModels"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("update")]
+        public HttpResponseMessage UpdateInnerCircle(int ContactId, string Relation, string Profession, string InterestListId, DateTime DOB, DateTime Annivasary, string Notes)
+        {
+            ContactModels contactModels = new ContactModels();
+            contactModels.ContactId = ContactId;
+            contactModels.RelativeORFamily = Relation;
+            contactModels.Profession = Profession;
+            contactModels.InterestList = InterestListId;
+            contactModels.BirthdayOn = DOB;
+            contactModels.Annivasary = Annivasary;
+            contactModels.Notes = Notes;
+            string Status = string.Empty;
+            if (!string.IsNullOrEmpty(Convert.ToString(contactModels.ContactId)))
+                Status = contactModels.UpdateCircle();
+            return Request.CreateResponse(HttpStatusCode.OK, Status);
+        }
+
+        #endregion
+
+    }
+}

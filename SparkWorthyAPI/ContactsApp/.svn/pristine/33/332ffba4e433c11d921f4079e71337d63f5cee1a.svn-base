@@ -1,0 +1,44 @@
+﻿using ContactAppAPI.Models.Login;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http;
+
+namespace ContactAppAPI.Controllers
+{
+   
+    public class RegisterationController : ApiController
+    {
+
+        #region "Create Account" 
+
+        /// <summary>
+        /// Add new account
+        /// </summary>
+        /// <param name="CreateAccount">Registration objects</param>
+        /// <returns></returns>
+
+       
+        [HttpPost]
+
+        public IHttpActionResult PostSaveRegistration(RegisterModules registerModules)
+        {
+            bool Status = registerModules.SaveAccount();  
+            return Ok(Status);
+        }
+
+      
+
+        #endregion
+
+
+        [HttpGet]
+        public string test(string a, string b)
+        {
+            return a;
+        }
+    }
+}

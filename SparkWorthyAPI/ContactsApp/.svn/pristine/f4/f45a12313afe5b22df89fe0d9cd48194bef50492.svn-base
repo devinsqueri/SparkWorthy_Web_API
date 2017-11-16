@@ -1,0 +1,376 @@
+﻿using ContactAppAPI.Models.Group;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+
+namespace ContactAppAPI.Controllers.Group
+{
+    [RoutePrefix("api/group")]
+    public class GroupsController : ApiController
+    {
+
+        #region "Import Single/Multiple contact to groups"
+
+        /// <summary>
+        /// insert contacts to group
+        /// </summary>
+        /// <param name="GroupModels"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("importContact")]
+        public HttpResponseMessage ImportContact(int GroupId, string ContactListId)
+        {
+            GroupModels groupModels = new GroupModels();
+            groupModels.GroupId = GroupId;
+            groupModels.ContactListId = ContactListId;
+            string Status = string.Empty;
+            if (!string.IsNullOrEmpty(Convert.ToString(groupModels.UserId)))
+                Status = groupModels.ImportContactsToGroup();
+            return Request.CreateResponse(HttpStatusCode.OK, Status);
+        }
+
+        #endregion
+
+        #region "Delete Single/Multiple contact from groups"
+
+        /// <summary>
+        /// delete contacts from group
+        /// </summary>
+        /// <param name="GroupModels"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("deleteGroupContacts")]
+        public HttpResponseMessage DeleteContactsFromGroup(int GroupId, string ContactListId)
+        {
+            GroupModels groupModels = new GroupModels();
+            groupModels.GroupId = GroupId;
+            groupModels.ContactListId = ContactListId;
+            string Status = string.Empty;
+            if (!string.IsNullOrEmpty(Convert.ToString(groupModels.UserId)))
+                Status = groupModels.DeleteContactsFromGroup();
+            return Request.CreateResponse(HttpStatusCode.OK, Status);
+        }
+
+        #endregion
+
+        #region "Display group contacts"
+
+        /// <summary>
+        /// delete contacts from group
+        /// </summary>
+        /// <param name="GroupModels"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("getGroupContacts")]
+        public HttpResponseMessage DisplayGroupContacts(int GroupId)
+        {
+            List<GroupModels> groupModelsList = new List<GroupModels>();
+            groupModelsList = this.GetGroupContacts(GroupId);
+            return Request.CreateResponse(HttpStatusCode.OK, groupModelsList);
+        }
+
+        [HttpPost]
+        public List<GroupModels> GetGroupContacts(int GroupId)
+        {
+            List<GroupModels> groupTypesList = new List<GroupModels>();
+            GroupModels groupModels = new GroupModels();
+            if (!string.IsNullOrEmpty(Convert.ToString(GroupId)))
+            {
+                DataTable dtGetUsers = new DataTable();
+                dtGetUsers = groupModels.GetGroupContacts(GroupId);
+                if (dtGetUsers.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtGetUsers.Rows)
+                    {
+                        GroupModels groupContactTypes = new GroupModels();
+
+                        groupContactTypes.GroupContactId = Convert.ToInt32(dr[0]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[1])))
+                            groupContactTypes.GroupId = Convert.ToInt32(dr[1]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[2])))
+                            groupContactTypes.ContactId = Convert.ToInt32(dr[2]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[3])))
+                            groupContactTypes.GroupCreatedOn = Convert.ToDateTime(dr[3]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[4])))
+                            groupContactTypes.GroupModifiedOn = Convert.ToDateTime(dr[4]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[5])))
+                            groupContactTypes.UserId = Convert.ToInt32(dr[5]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[6])))
+                            groupContactTypes.FirstName = Convert.ToString(dr[6]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[7])))
+                            groupContactTypes.LastName = Convert.ToString(dr[7]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[8])))
+                            groupContactTypes.Email = Convert.ToString(dr[8]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[9])))
+                            groupContactTypes.PhoneNumber = Convert.ToString(dr[9]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[10])))
+                            groupContactTypes.OfficeNumber = Convert.ToString(dr[10]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[11])))
+                            groupContactTypes.Position = Convert.ToString(dr[11]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[12])))
+                            groupContactTypes.Company = Convert.ToString(dr[12]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[13])))
+                            groupContactTypes.Relative = Convert.ToString(dr[13]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[14])))
+                            groupContactTypes.ContactProfilePicture = Convert.ToString(dr[14]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[15])))
+                            groupContactTypes.Profession = Convert.ToString(dr[15]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[16])))
+                            groupContactTypes.DateOfBirth = Convert.ToDateTime(dr[16]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[17])))
+                            groupContactTypes.IsFavorites = Convert.ToBoolean(dr[17]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[18])))
+                            groupContactTypes.FavoriteRating = Convert.ToInt32(dr[18]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[19])))
+                            groupContactTypes.Notes = Convert.ToString(dr[19]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[20])))
+                            groupContactTypes.GroupName = Convert.ToString(dr[20]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[21])))
+                            groupContactTypes.GroupProfilePicture = Convert.ToString(dr[21]);
+
+                        groupTypesList.Add(groupContactTypes);
+                    }
+                }
+            }
+            return groupTypesList;
+        }
+
+
+        #endregion
+
+        #region "Save"
+
+        /// <summary>
+        /// insert group
+        /// </summary>
+        /// <param name="GroupModels"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("save")]
+        public HttpResponseMessage AddGroup(int UserId, string GName)
+        {
+            GroupModels groupModels = new GroupModels();
+            groupModels.UserId = UserId;
+            groupModels.GroupName = GName;
+            string Status = string.Empty;
+            if (!string.IsNullOrEmpty(Convert.ToString(groupModels.UserId)))
+                Status = groupModels.AddGroup();
+            return Request.CreateResponse(HttpStatusCode.OK, Status);
+        }
+
+        #endregion
+
+        #region "Update"
+
+        /// <summary>
+        /// Update group
+        /// </summary>
+        /// <param name="GroupModels"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("update")]
+        public HttpResponseMessage UpdateGroup(int GId, string GName)
+        {
+            GroupModels groupModels = new GroupModels();
+            groupModels.GroupId = GId;
+            groupModels.GroupName = GName;
+            string Status = string.Empty;
+            if (!string.IsNullOrEmpty(Convert.ToString(groupModels.GroupId)))
+                Status = groupModels.UpdateGroup();
+            return Request.CreateResponse(HttpStatusCode.OK, Status);
+        }
+
+        #endregion
+
+        #region "Delete"
+
+        /// <summary>
+        /// delete group
+        /// </summary>
+        /// <param name="GroupModels"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("delete")]
+        public HttpResponseMessage DeleteGroup(int GroupId)
+        {
+            GroupModels groupModels = new GroupModels();
+            groupModels.GroupId = GroupId;
+            bool Status = false;
+            if (!string.IsNullOrEmpty(Convert.ToString(groupModels.GroupId)))
+                Status = groupModels.DeleteGroup();
+            return Request.CreateResponse(HttpStatusCode.OK, Status);
+        }
+
+        #endregion
+
+        #region "upload profile picture"
+
+        /// <summary>
+        /// upload profile picture
+        /// </summary>
+        /// <param name="GroupModels"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("uploadProfile")]
+        public HttpResponseMessage UploadGroupProfilePicture(int GroupId, string ProfileLocation)
+        {
+            GroupModels groupModels = new GroupModels();
+            groupModels.GroupId = GroupId;
+            groupModels.GroupProfilePicture = ProfileLocation;
+            bool Status = false;
+            if (!string.IsNullOrEmpty(Convert.ToString(groupModels.GroupId)))
+                Status = groupModels.UploadProfilePicture();
+            return Request.CreateResponse(HttpStatusCode.OK, Status);
+        }
+
+        #endregion
+
+        #region "Get"
+
+        /// <summary>
+        /// Get contact list
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="ContactId"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [Route("ViewGroups")]
+        [HttpGet]
+        public HttpResponseMessage ViewGroupList(int UserId)
+        {
+            List<GroupModels> GroupModelsList = new List<GroupModels>();
+            GroupModelsList = this.GetGroupList(UserId);
+            return Request.CreateResponse(HttpStatusCode.OK, GroupModelsList);
+        }
+
+        [HttpPost]
+        public List<GroupModels> GetGroupList(int UserId)
+        {
+            List<GroupModels> groupModelsList = new List<GroupModels>();
+            if (!string.IsNullOrEmpty(Convert.ToString(UserId)) && (UserId != 0))
+            {
+                GroupModels groupModels = new GroupModels();
+                DataTable dtContactList = new DataTable();
+                dtContactList = groupModels.GetGroupList(UserId);
+                if (dtContactList.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtContactList.Rows)
+                    {
+                        GroupModels groupModelsTypes = new GroupModels();
+                        groupModelsTypes.GroupId = Convert.ToInt32(dr[0]);
+
+                        groupModelsTypes.GroupName = Convert.ToString(dr[1]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[2])))
+                            groupModelsTypes.GroupProfilePicture = Convert.ToString(dr[2]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[3])))
+                            groupModelsTypes.CreatedOn = Convert.ToDateTime(dr[3]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[4])))
+                            groupModelsTypes.ModifiedOn = Convert.ToDateTime(dr[4]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[5])))
+                            groupModelsTypes.UserId = Convert.ToInt32(dr[5]);
+
+                        groupModelsList.Add(groupModelsTypes);
+                    }
+                }
+            }
+            return groupModelsList;
+        }
+
+        #endregion
+
+
+        #region "Get Specific group"
+
+        /// <summary>
+        /// Get contact list
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="ContactId"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [Route("getSpecificGroup")]
+        [HttpGet]
+        public HttpResponseMessage GetSpecificGroup(int GroupId)
+        {
+            List<GroupModels> GroupModelsList = new List<GroupModels>();
+            GroupModelsList = this.ViewSpecificGroup(GroupId);
+            return Request.CreateResponse(HttpStatusCode.OK, GroupModelsList);
+        }
+
+        [HttpPost]
+        public List<GroupModels> ViewSpecificGroup(int GroupId)
+        {
+            List<GroupModels> groupModelsList = new List<GroupModels>();
+            if (!string.IsNullOrEmpty(Convert.ToString(GroupId)) && (GroupId != 0))
+            {
+                GroupModels groupModels = new GroupModels();
+                DataTable dtContactList = new DataTable();
+                dtContactList = groupModels.GetSpecificGroup(GroupId);
+                if (dtContactList.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtContactList.Rows)
+                    {
+                        GroupModels groupModelsTypes = new GroupModels();
+                        groupModelsTypes.GroupId = Convert.ToInt32(dr[0]);
+
+                        groupModelsTypes.GroupName = Convert.ToString(dr[1]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[2])))
+                            groupModelsTypes.GroupProfilePicture = Convert.ToString(dr[2]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[3])))
+                            groupModelsTypes.CreatedOn = Convert.ToDateTime(dr[3]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[4])))
+                            groupModelsTypes.ModifiedOn = Convert.ToDateTime(dr[4]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[5])))
+                            groupModelsTypes.UserId = Convert.ToInt32(dr[5]);
+
+                        groupModelsList.Add(groupModelsTypes);
+                    }
+                }
+            }
+            return groupModelsList;
+        }
+
+        #endregion
+
+    }
+}

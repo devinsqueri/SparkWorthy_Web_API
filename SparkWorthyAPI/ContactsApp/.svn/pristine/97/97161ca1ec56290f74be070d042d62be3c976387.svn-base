@@ -1,0 +1,77 @@
+﻿using ContactAppAPI.Models.Contact;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+
+namespace ContactAppAPI.Controllers.Contact
+{
+    public class InnerCircleController : ApiController
+    {
+
+        #region "Get InnerCircleList"
+
+        /// <summary>
+        /// Get interest list
+        /// </summary>
+        /// <param name="UserId">User Id</param>
+        /// <param name="ContactId">Contact Id</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetInnerCircleList")]
+        public IHttpActionResult GetInnerCircleList(int UserId, int ContactId)
+        {
+            DataTable dtGetInterestList = new DataTable();
+            InnerCircleModels innerCircleModels = new InnerCircleModels();
+            innerCircleModels.UserId = UserId;
+            innerCircleModels.ContactId = ContactId;
+            dtGetInterestList = innerCircleModels.GetInnerCircleList();
+            return Ok(dtGetInterestList);
+        }
+
+        #endregion
+
+        #region "Add New InnerCircle"
+
+        /// <summary>
+        /// Add new interest
+        /// </summary>
+        /// <param name="InnerCircleModels">Inner Circle Models objects</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddNewInnerCircle")]
+        public IHttpActionResult AddNewInnerCircle(InnerCircleModels InnerCircleModels)
+        {
+            bool Status = false;
+            Status = InnerCircleModels.SaveInnerCircle();
+            return Ok(Status);
+        }
+
+        #endregion
+
+        #region "Delete Interest"
+        /// <summary>
+        /// Delete interest
+        /// </summary>
+        /// <param name="UserId">UserId</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("DeleteInterest")]
+        public IHttpActionResult DeleteInterest(int UserId, int ContactId, int InnerCircleId)
+        {
+            bool Status = false;
+            InnerCircleModels InnerCircleModels = new InnerCircleModels();
+            InnerCircleModels.UserId = UserId;
+            InnerCircleModels.ContactId = ContactId;
+            InnerCircleModels.InnerCircleId = InnerCircleId;
+            Status = InnerCircleModels.DeleteInnerCircle();
+            return Ok(Status);
+        }
+
+        #endregion
+
+    }
+}

@@ -1,0 +1,199 @@
+﻿using Brain_IQ_API.Models;
+using ContactAppAPI.CommonUpdates;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Net.Mail;
+using System.Web;
+
+namespace ContactAppAPI.Models.Login
+{
+    public class RegisterModules
+    {
+
+        #region "Property"
+
+        /// <summary>
+        /// get or set the UserId
+        /// </summary>
+        public int UserId { get; set; }
+
+        /// <summary>
+        /// get or set the Name
+        /// </summary>
+        public string Name { get; set; }
+        
+        /// <summary>
+        /// get or set the DateTime
+        /// </summary>
+        public DateTime DateOfBirth { get; set; }
+
+
+        /// <summary>
+        /// get or set the PhoneNumber
+        /// </summary>
+        public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// get or set the Email
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// get or set the Password
+        /// </summary>
+        public string Password { get; set; }
+
+        /// <summary>
+        /// get or set the Company
+        /// </summary>
+        public string Company { get; set; }
+
+        /// <summary>
+        /// get or set the CompanyFeedLink
+        /// </summary>
+        public string CompanyFeedLink { get; set; }
+
+        /// <summary>
+        /// get or set the Position
+        /// </summary>
+        public string Position { get; set; }
+
+        /// <summary>
+        /// get or set the Country
+        /// </summary>
+        public string Country { get; set; }
+
+        /// <summary>
+        /// get or set the City
+        /// </summary>
+        public string City { get; set; }
+
+        /// <summary>
+        /// get or set the State
+        /// </summary>
+        public string State { get; set; }
+
+        /// <summary>
+        /// get or set the ZipCode
+        /// </summary>
+        public string ZipCode { get; set; }
+
+        /// <summary>
+        /// get or set the InterestList
+        /// </summary>
+        public string InterestList { get; set; }
+
+        #endregion
+
+        #region "Public Methods"
+
+        /// <summary>
+        /// Save reminder on contact
+        /// </summary>
+        /// <returns></returns>
+        public bool SaveAccount()
+        {
+            SqlCommand sqlCommand = new SqlCommand("usp_insert_user_account");
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@Name", this.Name.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@PhoneNumber", this.PhoneNumber.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@Email", this.Email.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@Password", this.Password.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@Company", this.Company.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@CompanyFeedLink", this.CompanyFeedLink.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@Position", this.Position.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@Country", this.Country.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@City", this.City.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@State", this.State.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@ZipCode", this.ZipCode.ToString().Trim());
+            sqlCommand.Parameters.Add("@IdOut", SqlDbType.Int).Direction = ParameterDirection.Output;
+            DBOperations dbOperation = new DBOperations();
+            string outputValue = string.Empty;
+            bool Status = dbOperation.SaveData(sqlCommand, out outputValue, "@IdOut");
+            this.UserId = Convert.ToInt32(outputValue);
+            if (Status)
+            {
+
+                ImportUsersInterest();
+                //Mail mail = new Mail();
+                //mail.From = "sample.gmail.com";
+                //mail.To = this.Email.ToString().Trim();
+                //mail.Subject = "Thanks for Sregistration your" + " Userid : " + this.Email.ToString().Trim() + " Password : " + this.Password.ToString().Trim();
+                //SendRegistratonConfirmationMail(mail);
+                return true;
+            }
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// insert group
+        /// </summary>
+        /// <returns></returns>
+        public string ImportUsersInterest()
+        {
+            SqlCommand sqlcommand = new SqlCommand("usp_insert_user_interest_list");
+            sqlcommand.CommandType = CommandType.StoredProcedure;
+            sqlcommand.Parameters.AddWithValue("@UserId", this.UserId.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@InterestListId", this.InterestList.ToString().Trim());
+            DBOperations dbOperation = new DBOperations();
+            string outputValue = string.Empty;
+            bool Status = dbOperation.SaveData(sqlcommand, out outputValue, "");
+            if (Status)
+                return this.UserId.ToString().Trim();
+            else
+                return "false";
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="objMail"></param>
+        /// <returns></returns>
+        private string SendRegistratonConfirmationMail(Mail objMail)
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+                mail.To.Add(objMail.To);
+                mail.From = new MailAddress(objMail.From);
+                mail.Subject = objMail.Subject;
+                string Body = objMail.Body;
+                mail.Body = Body;
+                mail.IsBodyHtml = true;
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.gmail.com";
+                smtp.Port = 587;
+
+                smtp.Credentials = new System.Net.NetworkCredential
+                ("sample@gmail.com", "password");
+                smtp.EnableSsl = true;
+                smtp.Send(mail);
+                return "true";
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString().Trim();
+            }
+        }
+
+        #endregion
+
+    }
+
+    public class PersonalDetails
+    {
+        [Key]
+        [DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity)]
+        public int AutoId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int Age { get; set; }
+        public bool Active { get; set; }
+    }
+}

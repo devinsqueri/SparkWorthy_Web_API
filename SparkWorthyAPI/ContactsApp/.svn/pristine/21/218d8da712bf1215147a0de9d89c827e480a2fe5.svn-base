@@ -1,0 +1,268 @@
+﻿using ContactAppAPI.CommonUpdates;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+
+namespace ContactAppAPI.Models
+{
+    public class ContactModels
+    {
+
+        #region "Property"
+
+        /// <summary>
+        /// get or set the User Id
+        /// </summary>
+        public int UserId { get; set; }
+
+        /// <summary>
+        /// get or set the Contact Id
+        /// </summary>
+        public int ContactId { get; set; }
+
+        /// <summary>
+        /// get or set the First Name
+        /// </summary>
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// get or set the Last Name
+        /// </summary>
+        public string LastName { get; set; }
+
+        /// <summary>
+        /// get or set the Phone Number
+        /// </summary>
+        public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// get or set the Position
+        /// </summary>
+        public string Position { get; set; }
+
+        /// <summary>
+        /// get or set the Company Name
+        /// </summary>
+        public string CompanyName { get; set; }
+
+        /// <summary>
+        /// get or set the Company Name
+        /// </summary>
+        public string CompanyFeedURL { get; set; }
+
+        /// <summary>
+        /// get or set the RelativeORFamily
+        /// </summary>
+        public string RelativeORFamily { get; set; }
+
+        /// <summary>
+        /// get or set the Profession
+        /// </summary>
+        public string Profession { get; set; }
+
+
+        /// <summary>
+        /// get or set the Interest
+        /// </summary>
+        public string Interest { get; set; }
+
+        /// <summary>
+        /// get or set the Email
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// get or set the Password
+        /// </summary>
+        public string Password { get; set; }
+
+        /// <summary>
+        /// get or set the Office Number
+        /// </summary>
+        public string OfficeNumber { get; set; }
+
+        /// <summary>
+        /// get or set the Is Favorite
+        /// </summary>
+        public bool IsFavorite { get; set; }
+
+        /// <summary>
+        /// get or set the Created on
+        /// </summary>
+        public DateTime CreatedOn { get; set; }
+
+        /// <summary>
+        /// get or set the ProfilePicture
+        /// </summary>
+        public string ProfilePicture { get; set; }
+
+        /// <summary>
+        /// get or set the ProfilePicture
+        /// </summary>
+        public DateTime BirthdayOn { get; set; }
+
+        /// <summary>
+        /// get or set the Rating
+        /// </summary>
+        public int Rating { get; set; }
+
+        /// <summary>
+        /// get or set the Created on
+        /// </summary>
+        public DateTime ModifiedOn { get; set; }
+
+        /// <summary>
+        /// get or set the Country
+        /// </summary>
+        public string Country { get; set; }
+
+        /// <summary>
+        /// get or set the Country
+        /// </summary>
+        public string City { get; set; }
+
+        /// <summary>
+        /// get or set the Country
+        /// </summary>
+        public string State { get; set; }
+
+        /// <summary>
+        /// get or set the Notes
+        /// </summary>
+        public string Notes { get; set; }
+
+        /// <summary>
+        /// get or set the Annivasary
+        /// </summary>
+        public DateTime Annivasary { get; set; }
+
+        /// <summary>
+        /// get or set the Annivasary
+        /// </summary>
+        public string InterestList { get; set; }
+
+        #endregion
+
+        #region "Public Methods"
+
+        /// <summary>
+        /// Save contact detail
+        /// </summary>
+        /// <returns></returns>
+        public string SaveContact()
+        {
+            SqlCommand sqlcommand = new SqlCommand("usp_insert_contact");
+            sqlcommand.CommandType = CommandType.StoredProcedure;
+            sqlcommand.Parameters.AddWithValue("@UserId", this.UserId.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@ContactId", this.ContactId.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@FirstName", this.FirstName.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@LastName", this.LastName.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@Email", this.Email.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@PhoneNumber", this.PhoneNumber.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@OfficeNumber", this.OfficeNumber.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@Position", this.Position.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@CompanyName", this.CompanyName.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@RelativeORFamily", this.RelativeORFamily.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@ProfilePicture", this.ProfilePicture.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@BirthdayOn", this.BirthdayOn.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@IsFavorite", this.IsFavorite.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@Rating", this.Rating.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@Notes", this.Notes.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@ModifiedOn", this.ModifiedOn.ToString().Trim());
+            sqlcommand.Parameters.Add("@IdOut", SqlDbType.Int).Direction = ParameterDirection.Output;
+            DBOperations dbOperation = new DBOperations();
+            string outputValue = string.Empty;
+            bool Status = dbOperation.SaveData(sqlcommand, out outputValue, "@IdOut");
+            if (Status)
+                return outputValue;
+            else
+                return "false";
+        }
+
+
+        /// <summary>
+        /// Save contact detail
+        /// </summary>
+        /// <returns></returns>
+        public string UpdateCircle()
+        {
+            SqlCommand sqlcommand = new SqlCommand("usp_update_innercircle_edit_mode_contact");
+            sqlcommand.CommandType = CommandType.StoredProcedure;
+            sqlcommand.Parameters.AddWithValue("@ContactId", this.ContactId.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@Relation", this.RelativeORFamily.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@Profession", this.Profession.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@Interest", this.InterestList.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@BirthdayOn", this.BirthdayOn.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@Annivasary", this.Annivasary.ToString().Trim());
+            sqlcommand.Parameters.AddWithValue("@Notes", this.Notes.ToString().Trim());
+            DBOperations dbOperation = new DBOperations();
+            string outputValue = string.Empty;
+            bool Status = dbOperation.SaveData(sqlcommand, out outputValue, "");
+            if (Status)
+                return "true";
+            else
+                return "false";
+        }
+
+        /// <summary>
+        /// Add contact to favorite
+        /// </summary>
+        /// <returns></returns>
+        public bool AddFavorite()
+        {
+            SqlCommand sqlCommand = new SqlCommand("usp_update_favorite_list");
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@UserId", this.UserId.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@ContactId", this.ContactId.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@FavoriteContact", this.IsFavorite.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@Rating", this.Rating.ToString().Trim());
+            DBOperations dbOeration = new DBOperations();
+            string outputValue = string.Empty;
+            bool Status = dbOeration.SaveData(sqlCommand, out outputValue, "@IdOut");
+            if (Status)
+                return true;
+            else
+                return false;
+        }
+
+        public bool Delete()
+        {
+            SqlCommand sqlCommand = new SqlCommand("usp_delete_contact");
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@ContactId", this.ContactId.ToString().Trim());
+            DBOperations dbOeration = new DBOperations();
+            string outputValue = string.Empty;
+            bool Status = dbOeration.DeleteData(sqlCommand);
+            if (Status)
+                return true;
+            else
+                return false;
+        }
+
+
+        #endregion
+
+        #region "Private Methods"
+
+        /// <summary>
+        /// Get contact list
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        protected internal DataTable GetContactDetails(ContactModels contactModels)
+        {
+            SqlCommand sqlCommand = new SqlCommand("usp_get_contact_list");
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@UserId", contactModels.UserId.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@ContactId", contactModels.ContactId.ToString().Trim());
+            DBOperations dbOperations = new DBOperations();
+            return dbOperations.GetTableData(sqlCommand);
+        }
+
+        #endregion
+
+    }
+}

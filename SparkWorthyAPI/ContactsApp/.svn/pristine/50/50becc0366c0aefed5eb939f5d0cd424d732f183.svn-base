@@ -1,0 +1,67 @@
+﻿using ContactAppAPI.Models;
+using ContactAppAPI.Models.Login;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Helpers;
+using System.Web.Http;
+
+
+namespace ContactAppAPI.Controllers
+{
+    [RoutePrefix("api/Login")]
+    public class LoginController : ApiController
+    {
+
+        #region "LoginUser"
+
+        [AllowAnonymous]
+        [Route("LoginUser")]
+        [HttpGet]
+        public HttpResponseMessage LoginUser(string UserName, string Password)
+        {
+            List<LoginModels> loginModelsList = new List<LoginModels>();
+            LoginModels loginModels = new LoginModels();
+            loginModels.UserName = UserName; loginModels.Password = Password;
+            loginModelsList = this.GetLoginUsers(loginModels);
+            return Request.CreateResponse(HttpStatusCode.OK, loginModelsList);
+        }
+
+
+        public List<LoginModels> GetLoginUsers(LoginModels loginModels)
+        {
+            List<LoginModels> userTypesList = new List<LoginModels>();
+            if (!string.IsNullOrEmpty(loginModels.UserName))
+            {
+                DataTable dtGetUsers = new DataTable();
+                dtGetUsers = loginModels.GetLoginUsers(loginModels);
+                if (dtGetUsers.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtGetUsers.Rows)
+                    {
+                        LoginModels userTypes = new LoginModels();
+                        userTypes.UserId = Convert.ToInt32(dr[0]);
+                        userTypes.UserName = Convert.ToString(dr[1]);
+                        userTypes.Email = Convert.ToString(dr[2]);
+                        userTypes.Password = Convert.ToString(dr[3]);
+                        userTypes.Active = Convert.ToBoolean(dr[4]);
+                        userTypesList.Add(userTypes);
+                    }
+                }
+            }
+            return userTypesList;
+        }
+
+        #endregion
+        
+    }
+}

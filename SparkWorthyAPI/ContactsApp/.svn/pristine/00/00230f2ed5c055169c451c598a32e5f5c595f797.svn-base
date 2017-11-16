@@ -1,0 +1,134 @@
+﻿using ContactAppAPI.CommonUpdates;
+using ContactAppAPI.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+
+namespace ContactAppAPI.Controllers
+{
+    [RoutePrefix("api/contact")]
+    public class ContactController : ApiController
+    {
+
+        #region "Save New Contact"
+
+        /// <summary>
+        /// Save new contact
+        /// </summary>
+        /// <param name="contactModels"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("SaveRegistration")]
+        public IHttpActionResult PostRegistration([FromBody]ContactModels contactModels)
+        {
+            bool Status = false;
+            if (!string.IsNullOrEmpty(contactModels.FirstName) && !string.IsNullOrEmpty(contactModels.LastName))
+                Status = contactModels.SaveContact();
+            return Ok(Status);
+        }
+
+        [Route("delete")]
+        [HttpDelete]
+        public IHttpActionResult delete(int UserId, int ContactId)
+        {
+            ContactModels contactModels = new ContactModels();
+            contactModels.UserId = UserId;
+            contactModels.ContactId = ContactId;
+            bool Status = contactModels.Delete();
+            return Ok(Status);
+
+        }
+        #endregion
+
+        #region "Get Contact List"
+
+        /// <summary>
+        /// Get contact list
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="ContactId"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [Route("ViewContacts")]
+        [HttpGet]
+        public HttpResponseMessage ViewContacts(int UserId, int ContactId)
+        {
+            List<ContactModels> contactModelsList = new List<ContactModels>();
+            ContactModels contactModels = new ContactModels();
+            contactModels.UserId = UserId; contactModels.ContactId = ContactId;
+            contactModelsList = this.GetContactList(contactModels);
+            return Request.CreateResponse(HttpStatusCode.OK, contactModelsList);
+        }
+
+       [HttpPost]
+        public List<ContactModels> GetContactList(ContactModels contactModels)
+        {
+            List<ContactModels> contactModelsList = new List<ContactModels>();
+            if (!string.IsNullOrEmpty(Convert.ToString(contactModels.UserId)) && (contactModels.UserId != 0))
+            {
+                DataTable dtContactList = new DataTable();
+                dtContactList = contactModels.GetContactDetails(contactModels);
+                if (dtContactList.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtContactList.Rows)
+                    {
+                        ContactModels contactModelsTypes = new ContactModels();
+                        contactModelsTypes.UserId = Convert.ToInt32(dr[0]);
+
+                        contactModelsTypes.ContactId = Convert.ToInt32(dr[1]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[2])))
+                            contactModelsTypes.FirstName = Convert.ToString(dr[2]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[3])))
+                            contactModelsTypes.LastName = Convert.ToString(dr[3]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[4])))
+                            contactModelsTypes.Email = Convert.ToString(dr[4]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[5])))
+                            contactModelsTypes.PhoneNumber = Convert.ToString(dr[5]);
+
+                        contactModelsTypes.OfficeNumber = Convert.ToString(dr[6]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[7])))
+                            contactModelsTypes.Position = Convert.ToString(dr[7]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[8])))
+                            contactModelsTypes.CompanyName = Convert.ToString(dr[8]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[9])))
+                            contactModelsTypes.RelativeORFamily = Convert.ToString(dr[9]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[10])))
+                            contactModelsTypes.ProfilePicture = Convert.ToString(dr[10]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[11])))
+                            contactModelsTypes.BirthdayOn = Convert.ToDateTime(dr[11]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[12])))
+                            contactModelsTypes.IsFavorite = Convert.ToBoolean(dr[12]);
+
+                        contactModelsTypes.Rating = Convert.ToInt32(dr[13]);
+
+                        contactModelsTypes.CreatedOn = Convert.ToDateTime(dr[14]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[15])))
+                            contactModelsTypes.ModifiedOn = Convert.ToDateTime(dr[15]);
+
+                        contactModelsList.Add(contactModelsTypes);
+                    }
+                }
+            }
+            return contactModelsList;
+        }
+
+        #endregion
+
+    }
+}

@@ -1,0 +1,341 @@
+﻿using ContactAppAPI.CommonUpdates;
+using ContactAppAPI.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web;
+using System.Web.Http;
+
+namespace ContactAppAPI.Controllers
+{
+    [Authorize]
+    [RoutePrefix("api/Contact")]
+    public class ContactController : ApiController
+    {
+
+        #region "Save"
+
+        /// <summary>
+        /// Save new contact
+        /// </summary>
+        /// <param name="contactModels"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("Save")]
+        public HttpResponseMessage PostRegistration(int ContactId, int UserId, string FirstName, string LastName, string EMail, string PhNo, string OfficeNo, 
+            string Position, string Company, string Relative, string Profilepic, DateTime DOB, bool Fav, int FavRating, string Notes, DateTime ModifyOn)
+        {
+            ContactModels contactModels = new ContactModels();
+            contactModels.ContactId = ContactId;
+            contactModels.UserId = UserId;
+            contactModels.FirstName = FirstName;
+            contactModels.LastName = LastName;
+            contactModels.Email = EMail;
+            contactModels.PhoneNumber = PhNo;
+            contactModels.OfficeNumber = OfficeNo;
+            contactModels.Position = Position;
+            contactModels.CompanyName = Company;
+            contactModels.RelativeORFamily = Relative;
+            contactModels.ProfilePicture = Profilepic;
+            contactModels.BirthdayOn = DOB;
+            contactModels.IsFavorite = Fav;
+            contactModels.Rating = FavRating;
+            contactModels.Notes = Notes;
+            contactModels.ModifiedOn = ModifyOn;
+            string Status = string.Empty;
+            if (!string.IsNullOrEmpty(contactModels.FirstName) && !string.IsNullOrEmpty(contactModels.LastName))
+                Status = contactModels.SaveContact();
+            return Request.CreateResponse(HttpStatusCode.OK, Status);
+        }
+
+        #endregion
+
+        #region "Delete"
+
+        [AllowAnonymous]
+        [Route("delete")]
+        [HttpGet]
+        public IHttpActionResult DeletePersonalDetails(int ContactId)
+        {
+            ContactModels contactModels = new ContactModels();
+            contactModels.ContactId = ContactId;
+            bool Status = contactModels.Delete();
+            return Ok(Status);
+
+        }
+
+        #endregion
+
+        #region "Get Contact"
+
+        /// <summary>
+        /// Get contact list
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="ContactId"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [Route("ViewContacts")]
+        [HttpGet]
+        public HttpResponseMessage ViewContacts(int UserId, int ContactId)
+        {
+            List<ContactModels> contactModelsList = new List<ContactModels>();
+            ContactModels contactModels = new ContactModels();
+            contactModels.UserId = UserId; contactModels.ContactId = ContactId;
+            contactModelsList = this.GetContactList(contactModels);
+            return Request.CreateResponse(HttpStatusCode.OK, contactModelsList);
+        }
+
+        [HttpPost]
+        public List<ContactModels> GetContactList(ContactModels contactModels)
+        {
+            List<ContactModels> contactModelsList = new List<ContactModels>();
+            if (!string.IsNullOrEmpty(Convert.ToString(contactModels.UserId)) && (contactModels.UserId != 0))
+            {
+                DataTable dtContactList = new DataTable();
+                dtContactList = contactModels.GetContactDetails(contactModels);
+                if (dtContactList.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtContactList.Rows)
+                    {
+                        ContactModels contactModelsTypes = new ContactModels();
+                        contactModelsTypes.UserId = Convert.ToInt32(dr[0]);
+
+                        contactModelsTypes.ContactId = Convert.ToInt32(dr[1]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[2])))
+                            contactModelsTypes.FirstName = Convert.ToString(dr[2]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[3])))
+                            contactModelsTypes.LastName = Convert.ToString(dr[3]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[4])))
+                            contactModelsTypes.Email = Convert.ToString(dr[4]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[5])))
+                            contactModelsTypes.PhoneNumber = Convert.ToString(dr[5]);
+
+                        contactModelsTypes.OfficeNumber = Convert.ToString(dr[6]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[7])))
+                            contactModelsTypes.Position = Convert.ToString(dr[7]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[8])))
+                            contactModelsTypes.CompanyName = Convert.ToString(dr[8]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[9])))
+                            contactModelsTypes.RelativeORFamily = Convert.ToString(dr[9]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[10])))
+                            contactModelsTypes.ProfilePicture = Convert.ToString(dr[10]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[11])))
+                            contactModelsTypes.BirthdayOn = Convert.ToDateTime(dr[11]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[12])))
+                            contactModelsTypes.IsFavorite = Convert.ToBoolean(dr[12]);
+
+                        contactModelsTypes.Rating = Convert.ToInt32(dr[13]);
+
+                        contactModelsTypes.CreatedOn = Convert.ToDateTime(dr[14]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[15])))
+                            contactModelsTypes.ModifiedOn = Convert.ToDateTime(dr[15]);
+
+                        contactModelsList.Add(contactModelsTypes);
+                    }
+                }
+            }
+            return contactModelsList;
+        }
+
+        #endregion
+
+        #region "Get Birthday Contact"
+
+        /// <summary>
+        /// Get birthday contact list
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [Route("todayBirthdays")]
+        [HttpGet]
+        public HttpResponseMessage GetBirthdayContacts(int UserId)
+        {
+            List<ContactModels> contactModelsList = new List<ContactModels>();
+            contactModelsList = this.GetBirthdayContactList(UserId);
+            return Request.CreateResponse(HttpStatusCode.OK, contactModelsList);
+        }
+
+
+        [HttpPost]
+        public List<ContactModels> GetBirthdayContactList(int UserId)
+        {
+            ContactModels contactModels = new ContactModels();
+            List<ContactModels> contactModelsList = new List<ContactModels>();
+            if (!string.IsNullOrEmpty(Convert.ToString(contactModels.UserId)) && (contactModels.UserId != 0))
+            {
+                DataTable dtContactList = new DataTable();
+                dtContactList = contactModels.GetBirthdayContactDetails(UserId);
+                if (dtContactList.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtContactList.Rows)
+                    {
+                        ContactModels contactModelsTypes = new ContactModels();
+                        contactModelsTypes.UserId = Convert.ToInt32(dr[0]);
+
+                        contactModelsTypes.ContactId = Convert.ToInt32(dr[1]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[2])))
+                            contactModelsTypes.FirstName = Convert.ToString(dr[2]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[3])))
+                            contactModelsTypes.LastName = Convert.ToString(dr[3]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[4])))
+                            contactModelsTypes.Email = Convert.ToString(dr[4]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[5])))
+                            contactModelsTypes.PhoneNumber = Convert.ToString(dr[5]);
+
+                        contactModelsTypes.OfficeNumber = Convert.ToString(dr[6]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[7])))
+                            contactModelsTypes.Position = Convert.ToString(dr[7]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[8])))
+                            contactModelsTypes.CompanyName = Convert.ToString(dr[8]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[9])))
+                            contactModelsTypes.RelativeORFamily = Convert.ToString(dr[9]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[10])))
+                            contactModelsTypes.ProfilePicture = Convert.ToString(dr[10]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[11])))
+                            contactModelsTypes.BirthdayOn = Convert.ToDateTime(dr[11]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[12])))
+                            contactModelsTypes.IsFavorite = Convert.ToBoolean(dr[12]);
+
+                        contactModelsTypes.Rating = Convert.ToInt32(dr[13]);
+
+                        contactModelsTypes.CreatedOn = Convert.ToDateTime(dr[14]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[15])))
+                            contactModelsTypes.ModifiedOn = Convert.ToDateTime(dr[15]);
+
+                        contactModelsList.Add(contactModelsTypes);
+                    }
+                }
+            }
+            return contactModelsList;
+        }
+
+
+
+        #endregion
+
+        #region "upload profile picture"
+
+        /// <summary>
+        /// upload profile picture
+        /// </summary>
+        /// <param name="ContactModels"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("uploadProfile")]
+        public HttpResponseMessage UploadGroupProfilePicture(int ContactId, string ProfileLocation)
+        {
+            ContactModels contactModels = new ContactModels();
+            contactModels.ContactId = ContactId;
+            contactModels.ProfilePicture = ProfileLocation;
+            bool Status = false;
+            if (!string.IsNullOrEmpty(Convert.ToString(contactModels.ContactId)))
+                Status = contactModels.UploadProfilePicture();
+            return Request.CreateResponse(HttpStatusCode.OK, Status);
+        }
+
+        public IHttpActionResult UploadImage(ImageModel model)
+        {
+            var imgUrl = WriteImage(model.Bytes);
+
+            // Some code
+        }
+
+        [HttpPost()]
+        public string UploadFiles()
+        {
+            int iUploadedCnt = 0;
+
+            // DEFINE THE PATH WHERE WE WANT TO SAVE THE FILES.
+            string sPath = "UploadImages/users/";
+            sPath = System.Web.Hosting.HostingEnvironment.MapPath("~/locker/");
+
+            HttpFileCollection hfc = HttpContext.Current.Request.Files;
+
+            // CHECK THE FILE COUNT.
+            for (int iCnt = 0; iCnt <= hfc.Count - 1; iCnt++)
+            {
+                HttpPostedFile hpf = hfc[iCnt];
+
+                if (hpf.ContentLength > 0)
+                {
+                    // CHECK IF THE SELECTED FILE(S) ALREADY EXISTS IN FOLDER. (AVOID DUPLICATE)
+                    if (!File.Exists(sPath + Path.GetFileName(hpf.FileName)))
+                    {
+                        // SAVE THE FILES IN THE FOLDER.
+                        hpf.SaveAs(sPath + Path.GetFileName(hpf.FileName));
+                        iUploadedCnt = iUploadedCnt + 1;
+                    }
+                }
+            }
+
+            // RETURN A MESSAGE (OPTIONAL).
+            if (iUploadedCnt > 0)
+            {
+                return iUploadedCnt + " Files Uploaded Successfully";
+            }
+            else
+            {
+                return "Upload Failed";
+            }
+        }
+
+        private string WriteImage(byte[] arr)
+        {
+            var filename = $@"images\{DateTime.Now.Ticks}.";
+
+            using (var im = Image.FromStream(new MemoryStream(arr)))
+            {
+                ImageFormat frmt;
+                if (ImageFormat.Png.Equals(im.RawFormat))
+                {
+                    filename += "png";
+                    frmt = ImageFormat.Png;
+                }
+                else
+                {
+                    filename += "jpg";
+                    frmt = ImageFormat.Jpeg;
+                }
+                string path = HttpContext.Current.Server.MapPath("~/") + filename;
+                im.Save(path, frmt);
+            }
+
+            return $@"http:\\{Request.RequestUri.Host}\{filename}";
+        }
+
+        #endregion
+    }
+}

@@ -1,0 +1,117 @@
+﻿using ContactAppAPI.Models.Feed;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.ServiceModel.Syndication;
+using System.Text;
+using System.Web.Http;
+using System.Xml;
+
+namespace ContactAppAPI.Controllers.Feed
+{
+    [RoutePrefix("api/Feed")]
+    public class FeedsController : ApiController
+    {
+
+        #region " Get feeds"
+
+        /// <summary>
+        /// Get contact list
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="ContactId"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [Route("getFeeds")]
+        [HttpGet]
+        public HttpResponseMessage GetFeeds(int FeedId)
+        {
+            List<FeedsModel> contactModelsList = new List<FeedsModel>();
+            contactModelsList = this.GetContactList(FeedId);
+            return Request.CreateResponse(HttpStatusCode.OK, contactModelsList);
+        }
+
+        [HttpPost]
+        public List<FeedsModel> GetContactList(int FeedId)
+        {
+            List<FeedsModel> feedModelsList = new List<FeedsModel>();
+            List<FeedsModel> GetXMLList = new List<FeedsModel>();
+            if (!string.IsNullOrEmpty(Convert.ToString(FeedId)) && (FeedId != 0))
+            {
+                DataTable dtFeedList = new DataTable();
+                FeedsModel feedsModel = new FeedsModel();
+                dtFeedList = feedsModel.GetFeedList(FeedId);
+                string LoadFeeds = string.Empty;
+                if (dtFeedList.Rows.Count > 0)
+                {
+                    foreach (DataRow drFeeds in dtFeedList.Rows)
+                    {
+                        FeedsModel feedModelsTypes = new FeedsModel();
+                        feedModelsTypes.FeedId = Convert.ToInt32(drFeeds[0]);
+                        feedModelsTypes.FeedURL = Convert.ToString(drFeeds[1]);
+                        LoadFeeds = feedModelsTypes.FeedURL;
+                        feedModelsList.Add(feedModelsTypes);
+                    }
+
+                    GetXMLList = ParseRssFile(LoadFeeds);
+
+                    //string albumRSS;
+                    //string url = "http://www.SomeSite.com/rss‎";
+                    //XmlReader r = XmlReader.Create(url);
+                    //SyndicationFeed albums = SyndicationFeed.Load(r);
+                    //r.Close();
+                    //foreach (SyndicationItem album in albums.Items)
+                    //{
+
+                    //    cell.InnerHtml = cell.InnerHtml + string.Format("<br \'><a href='{0}'>{1}</a>", album.Links[0].Uri, album.Title.Text);
+                    //    albumRSS = GetAlbumRSS(album);
+
+                    //}
+                }
+            }
+            return GetXMLList;
+        }
+
+        private List<FeedsModel> ParseRssFile(string FeedUrl)
+        {
+            FeedsModel feedXMLModel = new FeedsModel();
+            XmlDocument rssXmlDoc = new XmlDocument();
+            List<FeedsModel> feedModelsList = new List<FeedsModel>();
+            // Load the RSS file from the RSS URL
+            rssXmlDoc.Load(FeedUrl);
+
+            // Parse the Items in the RSS file
+            XmlNodeList rssNodes = rssXmlDoc.SelectNodes("rss/channel/item");
+
+            StringBuilder rssContent = new StringBuilder();
+
+            // Iterate through the items in the RSS file
+            foreach (XmlNode rssNode in rssNodes)
+            {
+                XmlNode rssSubNode = rssNode.SelectSingleNode("title");
+                string title = rssSubNode != null ? rssSubNode.InnerText : "";
+
+                rssSubNode = rssNode.SelectSingleNode("link");
+                string link = rssSubNode != null ? rssSubNode.InnerText : "";
+
+                rssSubNode = rssNode.SelectSingleNode("description");
+                string description = rssSubNode != null ? rssSubNode.InnerText : "";
+
+                feedXMLModel.FeedTitle = title;
+                feedXMLModel.FeedLink = link;
+                feedXMLModel.FeedDescription = description;
+                feedModelsList.Add(feedXMLModel);
+
+            }
+
+            // Return the string that contain the RSS items
+            return feedModelsList;
+        }
+
+        #endregion
+
+    }
+}

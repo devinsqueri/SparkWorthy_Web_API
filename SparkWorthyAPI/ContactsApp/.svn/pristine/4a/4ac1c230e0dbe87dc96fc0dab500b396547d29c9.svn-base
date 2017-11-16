@@ -1,0 +1,64 @@
+﻿using ContactAppAPI.CommonUpdates;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+
+namespace ContactAppAPI.Models
+{
+    public class LoginModels
+    {
+
+        #region "Property"
+
+        /// <summary>
+        /// get or set the User Id
+        /// </summary>
+        public int UserId { get; set; }
+
+        /// <summary>
+        /// get or set the User Name
+        /// </summary>
+        public string UserName { get; set; }
+
+
+        /// <summary>
+        /// get or set the User Name
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// get or set the Password
+        /// </summary>
+        public string Password { get; set; }
+
+        /// <summary>
+        /// get or set the Active
+        /// </summary>
+        public bool Active { get; set; }
+
+        #endregion
+
+        #region "Private Methods"
+
+        /// <summary>
+        /// Get login details
+        /// </summary>
+        /// <param name="loginModels"></param>
+        /// <returns></returns>
+        protected internal DataTable GetLoginUsers(LoginModels loginModels)
+        {
+            SqlCommand sqlCommand = new SqlCommand("usp_get_login_user");
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@UserName", loginModels.UserName.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@Password", loginModels.Password.ToString().Trim());
+            DBOperations dbOperations = new DBOperations();
+            return dbOperations.GetTableData(sqlCommand);
+        }
+
+        #endregion"
+
+    }
+}

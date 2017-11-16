@@ -1,0 +1,131 @@
+﻿using ContactAppAPI.CommonUpdates;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+
+namespace ContactAppAPI.Models
+{
+    public class InterestModels
+    {
+
+        #region "Property"
+
+        /// <summary>
+        /// get or set the Id
+        /// </summary>
+        public int InterestedId { get; set; }
+
+        /// <summary>
+        /// get or set the Contact Id
+        /// </summary>
+        public int ContactId { get; set; }
+
+        /// <summary>
+        /// get or set the Interest Id
+        /// </summary>
+        public int InterestId { get; set; }
+
+        /// <summary>
+        /// get or set the Interest Name
+        /// </summary>
+        public string InterestName { get; set; }
+
+        /// <summary>
+        /// get or set the Created On
+        /// </summary>
+        public DateTime CreatedOn { get; set; }
+
+        /// <summary>
+        /// get or set the Description
+        /// </summary>
+        public string Description { get; set; }
+
+        public int InterestCollectionId { get; set; }
+
+        public string PictureLocation { get; set; }
+
+
+        public string PictureDescription { get; set; }
+
+       
+
+        #endregion
+
+        #region "Public Methods"
+
+        /// <summary>
+        /// Save interest on contact
+        /// </summary>
+        /// <returns></returns>
+        public bool SaveInterest()
+        {
+            SqlCommand sqlCommand = new SqlCommand("usp_insert_interest");
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@ContactId", this.ContactId.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@InterestId", this.InterestId.ToString().Trim());
+            DBOperations dbOperation = new DBOperations();
+            string outputValue = string.Empty;
+            bool Status = dbOperation.SaveData(sqlCommand, out outputValue, "");
+            if (Status)
+                return true;
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// Delete interest on contact
+        /// </summary>
+        /// <returns></returns>
+        public bool DeleteInterest()
+        {
+            SqlCommand sqlCommand = new SqlCommand("usp_delete_interest");
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@InterestedId", this.InterestedId.ToString().Trim());
+            DBOperations dbOperation = new DBOperations();
+            bool Status = dbOperation.DeleteData(sqlCommand);
+            if (Status)
+                return true;
+            else
+                return false;
+        }
+        
+        #endregion
+        
+        #region "Private Methods"
+
+        /// <summary>
+        /// Get contact list
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        protected internal DataTable GetInterestList()
+        {
+            SqlCommand sqlCommand = new SqlCommand("usp_get_interest_list");
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@ContactId", this.ContactId.ToString().Trim());
+            DBOperations dbOperations = new DBOperations();
+            return dbOperations.GetTableData(sqlCommand);
+        }
+
+
+        /// <summary>
+        /// Get contact list
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        protected internal DataTable ViewSpecificInterestPictures()
+        {
+            SqlCommand sqlCommand = new SqlCommand("usp_get_interest_profiles");
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@interestId", this.InterestId.ToString().Trim());
+            DBOperations dbOperations = new DBOperations();
+            return dbOperations.GetTableData(sqlCommand);
+        }
+
+        #endregion
+
+    }
+}

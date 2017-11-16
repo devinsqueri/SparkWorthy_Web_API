@@ -1,0 +1,124 @@
+﻿using ContactAppAPI.CommonUpdates;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+
+namespace ContactAppAPI.Models.Contact
+{
+    public class InnerCircleModels
+    {
+
+        #region "Property"
+
+        /// <summary>
+        /// get or set the User Id
+        /// </summary>
+        public int UserId { get; set; }
+
+        /// <summary>
+        /// get or set the Contact Id
+        /// </summary>
+        public int ContactId { get; set; }
+
+        /// <summary>
+        /// get or set the Inner Circle Id
+        /// </summary>
+        public int InnerCircleId { get; set; }
+
+        /// <summary>
+        /// get or set the Inner Circle Name
+        /// </summary>
+        public int RelationshipContactId { get; set; }
+
+        /// <summary>
+        /// get or set the Inner Circle Relationship
+        /// </summary>
+        public string RelationShip { get; set; }
+
+        /// <summary>
+        /// get or set the Created On
+        /// </summary>
+        public DateTime CreatedOn { get; set; }
+
+        /// <summary>
+        /// get or set the Annivesary
+        /// </summary>
+        public DateTime Annivesary { get; set; }
+
+        /// <summary>
+        /// get or set the Note
+        /// </summary>
+        public string Notes { get; set; }
+
+        #endregion
+
+        #region "Public Methods"
+
+        /// <summary>
+        /// Save/Update Inner Circle
+        /// </summary>
+        /// <returns></returns>
+        public bool SaveInnerCircle()
+        {
+            SqlCommand sqlCommand = new SqlCommand("usp_insert_innercircle");
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@ContactId", this.ContactId.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@InnerCircleId", this.InnerCircleId.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@RelationshipContactId", this.RelationshipContactId.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@RelationShip", this.RelationShip.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@Note", this.Notes.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@Annivesary", this.Annivesary.ToString().Trim());
+            sqlCommand.Parameters.Add("@IdOut", SqlDbType.UniqueIdentifier).Direction = ParameterDirection.Input;
+            DBOperations dbOperation = new DBOperations();
+            string outputValue = string.Empty;
+            bool Status = dbOperation.SaveData(sqlCommand, out outputValue, "@IdOut");
+            if (Status)
+                return true;
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// Delete Inner Circles
+        /// </summary>
+        /// <returns></returns>
+        public bool DeleteInnerCircle()
+        {
+            SqlCommand sqlCommand = new SqlCommand("usp_delete_innercircle");
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@InnerCircleId", this.InnerCircleId.ToString().Trim());
+            DBOperations dbOperation = new DBOperations();
+            bool Status = dbOperation.DeleteData(sqlCommand);
+            if (Status)
+                return true;
+            else
+                return false;
+        }
+
+        #endregion
+
+        #region "Private Methods"
+
+        /// <summary>
+        /// Get inner circle list
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        protected internal DataTable GetInnerCircleList()
+        {
+            SqlCommand sqlCommand = new SqlCommand("usp_get_innercircle_list");
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@UserId", this.UserId.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@ContactId", this.ContactId.ToString().Trim());
+            sqlCommand.Parameters.AddWithValue("@InnerCircleId", this.InnerCircleId.ToString().Trim());
+            DBOperations dbOperations = new DBOperations();
+            return dbOperations.GetTableData(sqlCommand);
+        }
+
+        #endregion
+
+    }
+}

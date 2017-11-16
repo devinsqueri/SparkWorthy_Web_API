@@ -1,0 +1,111 @@
+﻿using ContactAppAPI.Models;
+using ContactAppAPI.Models.Login;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Helpers;
+using System.Web.Http;
+
+
+namespace ContactAppAPI.Controllers
+{
+    [RoutePrefix("api/Login")]
+    public class LoginController : ApiController
+    {
+
+        #region "LoginUser"
+
+        [AllowAnonymous]
+        [Route("LoginUser")]
+        [HttpGet]
+        public HttpResponseMessage LoginUser(string UserName, string Password)
+        {
+            List<LoginModels> loginModelsList = new List<LoginModels>();
+            LoginModels loginModels = new LoginModels();
+            loginModels.UserName = UserName; loginModels.Password = Password;
+            loginModelsList = this.GetLoginUsers(loginModels);
+            return Request.CreateResponse(HttpStatusCode.OK, loginModelsList);
+        }
+
+        [HttpPost]
+        public List<LoginModels> GetLoginUsers(LoginModels loginModels)
+        {
+            List<LoginModels> userTypesList = new List<LoginModels>();
+            if (!string.IsNullOrEmpty(loginModels.UserName))
+            {
+                DataTable dtGetUsers = new DataTable();
+                dtGetUsers = loginModels.GetLoginUsers(loginModels);
+                if (dtGetUsers.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtGetUsers.Rows)
+                    {
+                        LoginModels userTypes = new LoginModels();
+                        userTypes.UserId = Convert.ToInt32(dr[0]);
+                        userTypes.UserName = Convert.ToString(dr[1]);
+                        userTypes.Email = Convert.ToString(dr[2]);
+                        userTypes.Password = Convert.ToString(dr[3]);
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[4])))
+                            userTypes.CompanyName = Convert.ToString(dr[4]);
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[5])))
+                            userTypes.CompanyWebSiteFeed = Convert.ToString(dr[5]);
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[6])))
+                            userTypes.Position = Convert.ToString(dr[6]);
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[7])))
+                            userTypes.Country = Convert.ToString(dr[7]);
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[8])))
+                            userTypes.City = Convert.ToString(dr[8]);
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[9])))
+                            userTypes.State = Convert.ToString(dr[9]);
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[10])))
+                            userTypes.ZipCode = Convert.ToString(dr[10]);
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[11])))
+                            userTypes.CreatedOn = Convert.ToDateTime(dr[11]);
+                        if (!string.IsNullOrEmpty(Convert.ToString(dr[12])))
+                            userTypes.ModifiedOn = Convert.ToDateTime(dr[12]);
+                        userTypes.Active = Convert.ToBoolean(dr[13]);
+                        userTypes.PhoneNO = Convert.ToString(dr[14]);
+                        userTypesList.Add(userTypes);
+                    }
+                }
+            }
+            return userTypesList;
+        }
+
+        #endregion
+        
+        #region "Update Users"
+
+        /// <summary>
+        /// Save new contact
+        /// </summary>
+        /// <param name="contactModels"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("update")]
+        public HttpResponseMessage UpdateUserProfile(int UserId, string Name, string CompanyFeed, string Location)
+        {
+            LoginModels loginModels = new LoginModels();
+            loginModels.UserId = UserId;
+            loginModels.UserName = Name;
+            loginModels.CompanyWebSiteFeed = CompanyFeed;
+            loginModels.Country = Location;
+            string Status = string.Empty;
+            if (!string.IsNullOrEmpty(Convert.ToString(loginModels.UserId)))
+                Status = loginModels.UpdateUsers();
+            return Request.CreateResponse(HttpStatusCode.OK, Status);
+        }
+
+        #endregion
+
+    }
+}
